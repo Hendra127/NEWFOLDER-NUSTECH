@@ -1,0 +1,55 @@
+
+        .summary-card {
+            margin: 20px;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .card-title-custom {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .table-responsive {
+            padding: 0;
+            margin: 0;
+        }
+        .table-custom {
+            margin: 0;
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table-custom thead {
+            background-color: #2c5282;
+            color: white;
+        }
+        .table-custom thead th {
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            border: 1px solid #2c5282;
+        }
+        .table-custom tbody td {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .table-custom tbody tr {
+            background-color: white;
+        }
+        .table-custom tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .table-custom tbody tr:hover {
+            background-color: #f0f0f0;
+        }
+        .row-grand-total {
+            background-color: #e8eef7 !important;
+            font-weight: 600;
+        }
+        .row-grand-total td {
+            font-weight: 600;
+            color: #2c5282;
+        }

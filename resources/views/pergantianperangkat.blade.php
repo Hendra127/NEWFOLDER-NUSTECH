@@ -1,19 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>PM Liberta</title>
-
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ asset('css/password.css') }}">
+    <title>Dashboard Operasional</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/password.css') }}">    
+    <link rel="stylesheet" href="{{ asset('css/pergantianperangkat.css') }}">
 </head>
 <body>
-
 <header class="main-header">
         <div class="header-brand">
             Project <span class="separator">|</span> Operational
@@ -24,11 +21,10 @@
     </header>
 
     <div class="tabs-section">
-        <a href="{{ route('datasite') }}" class="tab {{ request()->is('datasite*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">All Sites</a>
-        <a href="{{ url('/datapass') }}" class="tab {{ request()->is('datapass*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Management Password</a>
-        <a href="{{ url('/laporanpm') }}" class="tab {{ request()->is('laporanpm*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Laporan PM</a>
-        <a href="{{ url('/PMLiberta') }}" class="tab {{ request()->is('PMLiberta*') ? 'active' : '' }}" style="text-decoration: none; color: White;">PM Liberta</a>
-        <a href="{{ url('/pm-summary') }}" class="tab {{ request()->is('pm-summary*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">PM Summary</a>
+        <a href="{{ route('pergantianperangkat') }}" class="tab {{ request()->is('pergantianperangkat*') ? 'active' : '' }}" style="text-decoration: none; color: White;">Pergantian Perangkat</a>
+        <a href="{{ url('/logpergantian') }}" class="tab {{ request()->is('logpergantian*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Log Perangkat</a>
+        <a href="{{ url('/spaetaracker') }}" class="tab {{ request()->is('sparetracker*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Spare Tracker</a>
+        <a href="{{ url('/summary') }}" class="tab {{ request()->is('summary*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Summary</a>
     </div>
 
     <!-- CARD -->
@@ -50,36 +46,30 @@
 
         <table>
             <thead">
-                <tr class="thead-dark text-center">
+                <tr class="thead-dark">
                     <th>NO</th>
                     <th>SITE ID</th>
-                    <th>NAMA LOKASI</th>
-                    <th>PROVINSI</th>
-                    <th>KABUPATEN / KOTA</th>
-                    <th>PIC CE</th>
-                    <th>MONTH</th>
-                    <th>DATE</th>
-                    <th>STATUS</th>
-                    <th>WEEK</th>
-                    <th>KATEGORI</th>
+                    <th>NAMA SITE</th>
+                    <th>PERANGKAT</th>
+                    <th>TANGGAL</th>
+                    <th>SN LAMA</th>
+                    <th>SN BARU</th>
+                    <th>KETERANGAN</th>
                     <th>AKSI</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td colspan="9" class="empty text-start">
+                    <td colspan="9" class="empty text-center">
                         Showing 0 of 0 results
                     </td>
-                </tr>
-            </tbody>
-        </table>
-
                 </tr>
             </tbody>
         </table>
     </div>
 
 </div>
+    
 
 </body>
 </html>

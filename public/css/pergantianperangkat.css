@@ -1,0 +1,193 @@
+
+        :root {
+            /* Warna Navy berdasarkan gambar header kedua */
+            --header-gradient: linear-gradient(90deg, #1c3d5a 0%, #254b6e 100%);
+            --body-bg: #e5e9f0;
+            --white: #ffffff;
+            --table-navy: #2d5274;
+            --active-tab: #2d5274;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            background-color: var(--body-bg);
+            color: #333;
+        }
+
+        /* HEADER - 100% Sesuai Gambar Kedua */
+        .main-header {
+            background: var(--header-gradient);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .header-brand span.separator {
+            font-weight: normal;
+            opacity: 0.7;
+        }
+
+        .user-profile-icon {
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        /* TAB NAVIGATION */
+        .tabs-section {
+            padding: 20px 30px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .tab-btn {
+            background: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            color: #555;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            cursor: pointer;
+        }
+
+        .tab-btn.active {
+            background-color: var(--active-tab);
+            color: white;
+        }
+
+        /* MAIN CONTENT CARD */
+        .content-container {
+            margin: 0 30px 30px 30px;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        /* TOOLBAR */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-tool {
+            background: #dce3eb;
+            border: none;
+            width: 70px;
+            height: 38px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            color: #444;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 320px;
+        }
+
+        .search-wrapper input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 12px;
+            border: 1px solid #ced4da;
+            background: #f8f9fa;
+        }
+
+        .search-wrapper i {
+            position: absolute;
+            right: 15px;
+            top: 12px;
+            color: #888;
+        }
+
+        /* TABLE */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10.5px; /* Font kecil sesuai gambar */
+        }
+
+        th {
+            background-color: var(--table-navy);
+            color: white;
+            padding: 10px 5px;
+            border: 1px solid #4a6b8a;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 8px;
+            border: 1px solid #dee2e6;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        /* PAGINATION */
+        .pagination {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            color: #777;
+        }
+
+        .dots {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #cbd5e1;
+            border-radius: 50%;
+        }
+
+        .pages {
+            display: flex;
+            gap: 15px;
+            font-size: 14px;
+        }
+
+        .page-num.active {
+            font-weight: bold;
+            color: #333;
+            background: #e9ecef;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }

@@ -9,6 +9,11 @@ use App\Http\Controllers\PMLibertaController;
 use App\Http\Controllers\CloseTicketController;
 use App\Http\Controllers\DetailTicketDashboardController;
 use App\Http\Controllers\SummaryTicketController;
+use App\Http\Controllers\PergantianController;
+use App\Http\Controllers\LogpergantianController;
+use App\Http\Controllers\SparetrackerController;
+use App\Http\Controllers\SummaryController;
+use App\Http\Controllers\TodolistController;
 
 // Open Ticket Routes
 Route::get('/open-ticket', [OpenTicketController::class, 'index'])->name('open');
@@ -51,3 +56,19 @@ Route::get('/detail-ticket', [DetailTicketDashboardController::class, 'index'])
 // SUMMARY
 Route::get('/summary-ticket', [SummaryTicketController::class, 'index'])
     ->name('summary.ticket');
+
+
+// Pergantian Perangkat Routes
+Route::get('/pergantianperangkat', [App\Http\Controllers\PergantianController::class, 'index'])->name('pergantianperangkat');
+
+// Log Pergantian Routes
+Route::get('/logpergantian', [App\Http\Controllers\LogpergantianController::class, 'index'])->name('logpergantian');
+
+// Spare Tracker Routes
+Route::get('/sparetracker', [App\Http\Controllers\SparetrackerController::class, 'index'])->name('sparetracker');
+
+// Summary Routes
+Route::get('/summary', [App\Http\Controllers\SummaryController::class, 'index'])->name('summaryperangkat');
+
+// To Do List Routes
+Route::get('/todolist', [App\Http\Controllers\TodolistController::class, 'index'])->name('todolist');

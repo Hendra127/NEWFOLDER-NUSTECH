@@ -222,7 +222,7 @@
 {{-- TOP BAR --}}
 <div class="topbar">
     <div class="title">Project &nbsp; | &nbsp; Operational</div>
-
+    
     <div class="avatar">
         <i class="bi bi-person-circle fs-5"></i>
     </div>

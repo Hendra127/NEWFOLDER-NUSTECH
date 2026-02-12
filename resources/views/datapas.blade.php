@@ -14,19 +14,16 @@
 </head>
 <body>
 
-<div class="page">
-
-    <!-- TOP BAR -->
-    <div class="topbar">
-        <div class="top-left">
-            <span>Project</span>
-            <span class="active">Operational</span>
+<header class="main-header">
+        <div class="header-brand">
+            Project <span class="separator">|</span> Operational
         </div>
-        <div class="profile"></div>
-    </div>
+        <div class="user-profile-icon">
+            <i class="bi bi-person-circle"></i>
+        </div>
+    </header>
 
-    <!-- TABS -->
-    <div class="tabs">
+    <div class="tabs-section">
         <a href="{{ route('datasite') }}" class="tab {{ request()->is('datasite*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">All Sites</a>
         <a href="{{ url('/datapass') }}" class="tab {{ request()->is('datapass*') ? 'active' : '' }}" style="text-decoration: none; color: White;">Management Password</a>
         <a href="{{ url('/laporanpm') }}" class="tab {{ request()->is('laporanpm*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Laporan PM</a>
@@ -51,15 +48,16 @@
             </form>
         </div>
 
-        <table class="table">
+        <table>
             <thead>
-                <tr>
+                <tr class="thead-dark text-center">
                     <th>Site ID</th>
                     <th>Nama Lokasi</th>
                     <th>Kabupaten</th>
                     <th>ADOP</th>
                     <th>PASS AP1</th>
                     <th>PASS AP2</th>
+                    <th>AKSI</th>
                 </tr>
             </thead>
             <tbody>
