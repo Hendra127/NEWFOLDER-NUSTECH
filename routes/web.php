@@ -65,7 +65,12 @@ Route::get('/pergantianperangkat', [App\Http\Controllers\PergantianController::c
 Route::get('/logpergantian', [App\Http\Controllers\LogpergantianController::class, 'index'])->name('logpergantian');
 
 // Spare Tracker Routes
-Route::get('/sparetracker', [App\Http\Controllers\SparetrackerController::class, 'index'])->name('sparetracker');
+Route::get('/sparetracker', [SparetrackerController::class, 'index'])->name('sparetracker.index');
+Route::post('/sparetracker/import', [SparetrackerController::class, 'import'])->name('sparetracker.import');
+Route::get('/sparetracker/export', [SparetrackerController::class, 'export'])->name('sparetracker.export');
+Route::post('/sparetracker/store', [SparetrackerController::class, 'store'])->name('sparetracker.store');
+Route::post('/sparetracker/update', [SparetrackerController::class, 'update'])->name('sparetracker.update');
+Route::delete('/sparetracker/delete/{id}', [SparetrackerController::class, 'destroy'])->name('sparetracker.destroy');
 
 // Summary Routes
 Route::get('/summary', [App\Http\Controllers\SummaryController::class, 'index'])->name('summaryperangkat');
