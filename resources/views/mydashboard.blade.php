@@ -27,12 +27,9 @@
         <div class="header-bg-layer"></div>
         <div class="header-content-layer">
             <div class="logo-section">
-                <div class="logo-icon">
-                    <i class="ph-fill ph-satellite"></i>
-                </div>
                 <div class="logo-text">
                     <h1>
-                        <i class="ph-fill ph-network"></i>
+                        <i> 📡 </i>
                         <span class="bold-title">NUSTECH</span>
                         <span class="regular-title">Monitoring Dashboard</span>
 

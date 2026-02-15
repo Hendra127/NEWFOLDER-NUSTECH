@@ -14,49 +14,33 @@ use App\Http\Controllers\LogpergantianController;
 use App\Http\Controllers\SparetrackerController;
 use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\TodolistController;
+use App\Http\Controllers\MyDashboardController;
 
-// Open Ticket Routes
-Route::get('/open-ticket', [OpenTicketController::class, 'index'])->name('open');
-Route::post('/open-ticket/store', [OpenTicketController::class, 'store'])->name('ticket.store');
-Route::post('/open-ticket/import', [OpenTicketController::class, 'import'])->name('ticket.import');
-Route::get('/open-ticket/export', [OpenTicketController::class, 'export'])->name('ticket.export');
+// --- SITES / DATASITE ROUTES ---
+Route::get('/sites/export', [SiteController::class, 'export'])->name('sites.export');
+Route::post('/sites/import', [SiteController::class, 'import'])->name('sites.import');
 
-// Data Site Routes
-Route::get('/sites', [SiteController::class, 'index'])->name('datasite');
+Route::resource('sites', SiteController::class)->names(['index' => 'datasite'
+])->except(['show', 'create', 'edit']);
 
-// Data Pas Routes
-Route::get('/datapass', [DatapasController::class, 'index'])->name('datapas');
-Route::post('/datapas/store', [DatapasController::class, 'store'])->name('datapas.store');
 
-// Laporan PM Routes
-Route::get('/laporanpm', [LaporanpmController::class, 'index'])->name('laporanpm');
-
-// PM Liberta Routes
-Route::get('/PMLiberta', [PMLibertaController::class, 'index'])->name('pmliberta');
-
-// My Dashboard Routes
-Route::get('/mydashboard', [App\Http\Controllers\MyDashboardController::class, 'index'])->name('mydashboard');
-
-// OPEN
+// --- OPEN TICKET ROUTES ---
 Route::get('/open-ticket', [OpenTicketController::class, 'index'])->name('open.ticket');
 Route::post('/open-ticket/store', [OpenTicketController::class, 'store'])->name('open.ticket.store');
 Route::get('/open-ticket/export', [OpenTicketController::class, 'export'])->name('open.ticket.export');
 Route::post('/open-ticket/import', [OpenTicketController::class, 'import'])->name('open.ticket.import');
 
-// CLOSE
+
+// --- CLOSE TICKET ROUTES ---
 Route::get('/close-ticket', [CloseTicketController::class, 'index'])->name('close.ticket');
 Route::post('/close-ticket/store', [CloseTicketController::class, 'store'])->name('close.ticket.store');
 Route::get('/close-ticket/export', [CloseTicketController::class, 'export'])->name('close.ticket.export');
 Route::post('/close-ticket/import', [CloseTicketController::class, 'import'])->name('close.ticket.import');
 
-// DETAIL TICKET
-Route::get('/detail-ticket', [DetailTicketDashboardController::class, 'index'])
-    ->name('detail.ticket.dashboard');
 
-// SUMMARY
-Route::get('/summary-ticket', [SummaryTicketController::class, 'index'])
-    ->name('summary.ticket');
-
+// --- DATA PAS ROUTES ---
+Route::get('/datapass', [DatapasController::class, 'index'])->name('datapas');
+Route::post('/datapas/store', [DatapasController::class, 'store'])->name('datapas.store');
 
 // Pergantian Perangkat Routes
 Route::get('/pergantianperangkat', [App\Http\Controllers\PergantianController::class, 'index'])->name('pergantianperangkat');
@@ -77,3 +61,15 @@ Route::get('/summary', [App\Http\Controllers\SummaryController::class, 'index'])
 
 // To Do List Routes
 Route::get('/todolist', [App\Http\Controllers\TodolistController::class, 'index'])->name('todolist');
+
+// --- MODUL LAINNYA ---
+Route::get('/mydashboard', [MyDashboardController::class, 'index'])->name('mydashboard');
+Route::get('/laporanpm', [LaporanpmController::class, 'index'])->name('laporanpm');
+Route::get('/PMLiberta', [PMLibertaController::class, 'index'])->name('pmliberta');
+Route::get('/detail-ticket', [DetailTicketDashboardController::class, 'index'])->name('detail.ticket.dashboard');
+Route::get('/summary-ticket', [SummaryTicketController::class, 'index'])->name('summary.ticket');
+Route::get('/pergantianperangkat', [PergantianController::class, 'index'])->name('pergantianperangkat');
+Route::get('/logpergantian', [LogpergantianController::class, 'index'])->name('logpergantian');
+Route::get('/sparetracker', [SparetrackerController::class, 'index'])->name('sparetracker');
+Route::get('/summary', [SummaryController::class, 'index'])->name('summaryperangkat');
+Route::get('/todolist', [TodolistController::class, 'index'])->name('todolist');

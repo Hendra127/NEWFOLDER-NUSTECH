@@ -6,8 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Site extends Model
 {
+    protected $table = 'sites';
+    
+    // PENTING: Karena site_id adalah string/varchar
+    protected $primaryKey = 'site_id';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
         'site_id',
+        'site_code', // Pastikan ini ada
+        'location_id', // Pastikan ini ada
         'sitename',
         'tipe',
         'batch',
@@ -39,9 +48,6 @@ class Site extends Model
         'ip_ap2',
         'expected_sqf'
     ];
-
-    protected $table = 'sites';
-
     public function location()
     {
         return $this->belongsTo(Location::class);
