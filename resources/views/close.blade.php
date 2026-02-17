@@ -1,418 +1,219 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Close Ticket</title>
-
+    <title>Close Ticket | Project Operational</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/password.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        :root{
-            --navy:#1e4a68;
-            --navy2:#234f70;
-            --bg:#eef2f5;
-            --text:#123247;
-            --muted:#6f8797;
-
-            --shadow-lg: 0 16px 30px rgba(18, 38, 141, 0.18);
-            --shadow-md: 0 10px 18px rgba(0,0,0,.15);
-            --shadow-sm: 0 6px 14px rgba(0,0,0,.12);
+        .search-box {
+            background: #fff;
+            border-radius: 50px;
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-
-        *{box-sizing:border-box}
-
-        body{
-            margin:0;
-            font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-            background: radial-gradient(ellipse at top, #f9fafb 0%, #eef2f5 40%, #e9edf1 100%);
-            color:var(--text);
+        .search-box input {
+            border: none;
+            outline: none;
+            padding: 10px;
+            background: transparent;
         }
-
-        /* NAVBAR */
-        .ticket-navbar{
-           height:76px;
-        background: linear-gradient(180deg,#275b7d 0%, #1e4a68 100%);
-        padding:0 26px;
-        color:#fff;
-        box-shadow:0 10px 22px rgba(0,0,0,.22);
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        position: sticky;
-        top:0;
-        z-index: 20;
+        .status-badge {
+            background-color: #d1e7dd;
+            color: #0f5132;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
         }
-        .nav-left{
-            display:flex;
-            align-items:center;
-            gap:28px;
-            font-weight:700;
-        }
-        .nav-item{
-            font-size:20px;
-            opacity:.95;
-        }
-        .nav-right{margin-left:auto;}
-        .avatar{
-            width:34px;height:34px;border-radius:999px;
-            background:rgba(255,255,255,.92);
-            display:grid;place-items:center;
-            color:#0f2f45;
-            box-shadow:0 10px 20px rgba(0,0,0,.18);
-        }
-
-        /* PAGE */
-        .ticket-page{ padding:22px 22px 40px; }
-
-        /* PILLS */
-        .ticket-controls{
-            display:flex;
-            align-items:center;
-            gap:18px;
-            padding:6px 6px 18px;
-        }
-        .pill{
-            height:38px;
-            padding:0 16px;
-            border-radius:10px;
-            background:#fff;
-            border:1px solid #e4eaef;
-            color:#123247;
-            font-weight:900;
-            font-size:18px;
-            display:inline-flex;
-            align-items:center;
-            justify-content:center;
-            box-shadow:var(--shadow-sm);
-            text-decoration:none;
-        }
-        .pill:hover{ transform:translateY(-1px); box-shadow:var(--shadow-md); }
-        .pill.is-active{
-            background:#214e6f;
-            border-color:#214e6f;
-            color:#fff;
-        }
-        .spacer{ flex:1; }
-        .pill.compact{ padding:0 18px; gap:12px; }
-        .badge{
-            width:46px;height:30px;border-radius:12px;
-            background:#f2f5f8;
-            display:grid;place-items:center;
-            font-weight:900;
-            color:#0f2f45;
-        }
-
-        /* CARD */
-        .ticket-card{
-            background:rgba(255,255,255,.92);
-            border-radius:22px;
-            padding:18px 18px 14px;
-            box-shadow:var(--shadow-lg);
-            border:1px solid rgba(49, 12, 98, 0.06);
-        }
-
-        /* TOP BAR CARD */
-        .ticket-card-top{
-            display:flex;
-            align-items:center;
-            gap:16px;
-            margin-bottom:12px;
-        }
-
-        .grow{ flex: 1; } /* INI YANG HILANG DI KODE KAMU */
-
-        .icon-pill{
-            height:44px;
-            min-width:90px;
-            padding:0 18px;
-            border-radius:999px;
-            background:#f5f7f9;
-            border:1px solid #e0e7ed;
-            display:inline-flex;
-            align-items:center;
-            justify-content:center;
-            box-shadow:var(--shadow-sm);
-            cursor:pointer;
-            text-decoration: none;
-            color: #14374f;
-        }
-
-       /* SEARCH PILL SMALL (seperti gambar) */
-.search-pill{
-    height: 40px;
-    width: min(300px, 48vw);
-    background: #eef0f2;
-    border-radius: 999px;
-    border: 1px solid #e3e7ec;
-    display: flex;
-    align-items: center;
-    padding: 0 10px;
-    gap: 8px;
-    box-shadow: 0 8px 16px rgba(0,0,0,.08);
-}
-
-.search-pill__icon{
-    width: 38px;
-    height: 30px;
-    border-radius: 12px;
-    border: none;
-    background: transparent;
-    display: grid;
-    place-items: center;
-    cursor: pointer;
-    color: #2b4c62;
-}
-
-.search-pill__icon svg{
-    width: 18px;
-    height: 18px;
-}
-
-.search-pill__input{
-    flex: 1;
-    height: 34px;
-    border: none;
-    outline: none;
-    background: transparent;
-    font-size: 16px;
-    font-weight: 500;
-    color: #2b4c62;
-}
-
-.search-pill__input::placeholder{
-    color: #7b8f9e;
-    font-weight: 500;
-}
-
-
-        /* TABLE */
-        .table-shell{
-            border-radius:0px;   /* jadi kotak */
-            overflow:hidden;
-        }
-
-        table{
-            width:100%;
-            border-collapse:collapse;
-            table-layout:fixed;
-        }
-        thead th{
-            background:#234f70;
-            color:#fff;
-            padding:12px 10px;
-            font-size:12px;
-            text-transform:uppercase;
-            font-weight:900;
-            border-right:1px solid rgba(255,255,255,.18);
-        }
-        tbody td{
-            padding:12px 10px;
-            font-size:12px;
-            font-weight:800;
-            color:#1c4763;
-            border-bottom:1px solid #e5edf3;
-            border-right:1px solid #e5edf3;
-            white-space:nowrap;
-            overflow:hidden;
-            text-overflow:ellipsis;
-        }
-        tbody tr:nth-child(even) td{ background:#fbfdff; }
-        tbody tr:hover td{ background:#f3f8fd; }
-
-        .col-no{ width:44px; text-align:center; }
-        .col-siteid{ width:170px; }
-        .col-sitename{ width:290px; }
-        .col-tipe{ width:110px; }
-        .col-batch{ width:190px; }
-        .col-prov{ width:140px; }
-        .col-kab{ width:140px; }
-
-        /* PAGINATION LARAVEL */
-        .pagination-wrap{
-            margin-top:16px;
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap:12px;
-            flex-wrap:wrap;
-        }
-        .pagination-wrap .info{
-            font-size:12px;
-            font-weight:900;
-            color:var(--muted);
-        }
-
-        /* bikin pagination Laravel jadi bulat */
-        .pagination{
-            display:flex;
-            gap:10px;
-            list-style:none;
-            padding:0;
-            margin:0;
-        }
-        .pagination li a,
-        .pagination li span{
-            width:30px;height:30px;
-            border-radius:999px;
-            display:grid;
-            place-items:center;
-            font-weight:900;
-            font-size:12px;
-            text-decoration:none;
-            background:#f0f3f6;
-            border:1px solid #dfe7ee;
-            color:#1e4a68;
-        }
-        .pagination li.active span{
-            background:#e6ebef;
-            border-color:#cfdbe4;
-        }
-
-        @media (max-width: 980px){
-            .ticket-controls{ flex-wrap:wrap; }
-            .spacer{ display:none; }
-            .search-pill{ width:100%; }
+        .summary-badge {
+            font-size: 12px;
+            padding: 5px 15px;
+            border-radius: 50px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            margin-right: 10px;
         }
     </style>
 </head>
-
 <body>
 
-{{-- NAVBAR --}}
-<div class="ticket-navbar">
-    <div class="nav-left">
-        <div class="nav-item">Project</div>
-        <div class="nav-item">Operational</div>
-    </div>
-
-    <div class="nav-right">
-        <div class="avatar">
-            <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
-                <path d="M12 12a4.5 4.5 0 1 0-4.5-4.5A4.5 4.5 0 0 0 12 12Z" stroke="currentColor" stroke-width="2"/>
-                <path d="M20 20a8 8 0 0 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
+    <header class="main-header">
+        <div class="header-brand">
+            Project <span class="separator">|</span> Operational
         </div>
-    </div>
+        <div class="user-profile-icon">
+            <i class="bi bi-person-circle"></i>
+        </div>
+    </header>
+
+    <div class="tabs-section d-flex align-items-center">
+    <a href="{{ url('/open-ticket') }}" class="tab {{ request()->is('open-ticket*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Open Tiket</a>
+    <a href="{{ url('/close-ticket') }}" class="tab {{ request()->is('close-ticket*') ? 'active' : '' }}" style="text-decoration: none; color: White;">Close Tiket</a>
+    <span class="summary-badge text-success ms-auto">Total Close: <b>{{ $closeAllCount }}</b></span>
+    <span class="summary-badge text-success">Close Hari Ini: <b>{{ $todayCount }}</b></span>
 </div>
 
-<div class="ticket-page">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <div class="actions me-3">
+                    <a href="{{ route('close.ticket.export') }}" class="btn-action bi bi-download" title="Download Excel" style="text-decoration: none; line-height: 1.8;"></a>
+                </div>
+            </div>
 
-    {{-- BUTTONS --}}
-    <div class="ticket-controls">
-        <a class="pill" href="{{ route('open.ticket') }}">Open Ticket</a>
-        <a class="pill is-active" href="{{ route('close.ticket') }}">Close Ticket</a>
-        <a class="pill" href="{{ route('detail.ticket.dashboard') }}">Detail Ticket</a>
-        <a class="pill" href="{{ route('summary.ticket') }}">Summary</a>
+            <form method="GET" action="{{ route('close.ticket') }}" class="search-form">
+                <div class="search-box d-flex align-items-center">
+                    <button type="button" class="filter-btn" data-bs-toggle="modal" data-bs-target="#modalFilter" style="background: none; border: none; padding-left: 15px;">
+                        <i class="bi bi-sliders2"></i> </button>
 
-        <div class="spacer"></div>
-
-        <div class="pill compact">
-            Close All
-            <span style="opacity:.35;font-weight:900;">:</span>
-            <span class="badge">{{ $closeAllCount }}</span>
-        </div>
-
-        <div class="pill compact">
-            Today
-            <span style="opacity:.35;font-weight:900;">:</span>
-            <span class="badge">{{ str_pad($todayCount, 2, '0', STR_PAD_LEFT) }}</span>
-        </div>
-    </div>
-
-    {{-- CARD --}}
-    <div class="ticket-card">
-
-        {{-- TOP BAR --}}
-        <div class="ticket-card-top">
-
-            <a class="icon-pill" href="{{ route('close.ticket.export') }}" title="Download Excel">
-                <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
-                    <path d="M12 3v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M8 11l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M4 20h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-            </a>
-
-            <div class="grow"></div>
-
-            {{-- SEARCH --}}
-            <form class="search-pill" method="GET" action="{{ route('close.ticket') }}">
-                <button type="button" class="search-pill__icon" title="Filter">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M4 6h16M7 12h10M10 18h4"
-                              stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                </button>
-
-                <input
-                    class="search-pill__input"
-                    type="text"
-                    name="q"
-                    value="{{ $search }}"
-                    placeholder="Search"
-                >
-
-                <button type="submit" class="search-pill__icon" title="Search">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z"
-                              stroke="currentColor" stroke-width="2"/>
-                        <path d="M16.5 16.5 21 21"
-                              stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                </button>
+                    <input type="text" id="searchInput" name="q" placeholder="Search..." value="{{ request('q') }}" style="flex-grow: 1; border: none; outline: none;">
+                    
+                    <button type="submit" class="search-btn">🔍</button>
+                </div>
             </form>
-
-        </div> {{-- ✅ INI PENUTUP ticket-card-top yang kamu lupa --}}
+        </div>
 
         {{-- TABLE --}}
-        <div class="table-shell">
+        <div style="overflow-x: auto; max-height: 600px;">
             <table>
                 <thead>
-                    <tr>
-                        <th class="col-no">NO.</th>
-                        <th class="col-siteid">SITE ID</th>
-                        <th class="col-sitename">SITE NAME</th>
-                        <th class="col-tipe">TIPE</th>
-                        <th class="col-batch">BATCH</th>
-                        <th class="col-prov">PROVINSI</th>
-                        <th class="col-kab">KABUPATEN</th>
+                    <tr class="thead-dark">
+                        <th>NO</th>
+                        <th>SITE ID</th>
+                        <th>NAMA SITE</th>
+                        <th>KATEGORI</th>
+                        <th>TANGGAL OPEN</th>
+                        <th>TANGGAL CLOSE</th> <th>DURASI</th>
+                        <th>STATUS</th>
+                        <th>CE</th>
                     </tr>
                 </thead>
-
                 <tbody>
                     @forelse($tickets as $i => $t)
-                        <tr>
-                            <td class="col-no">{{ ($tickets->firstItem() ?? 0) + $i }}</td>
-                            <td class="col-siteid">{{ $t->site_code }}</td>
-                            <td class="col-sitename">{{ $t->nama_site }}</td>
-                            <td class="col-tipe">{{ $t->kategori }}</td>
-                            <td class="col-batch">{{ $t->detail_problem }}</td>
-                            <td class="col-prov">{{ $t->provinsi }}</td>
-                            <td class="col-kab">{{ $t->kabupaten }}</td>
-                        </tr>
+                    <tr>
+                        <td class="text-center">{{ $tickets->firstItem() + $i }}</td>
+                        <td class="text-center">{{ $t->site_code }}</td>
+                        <td>{{ $t->nama_site }}</td>
+                        <td class="text-center">{{ $t->kategori }}</td>
+                        <td class="text-center">{{ \Carbon\Carbon::parse($t->tanggal_rekap)->format('d M Y') }}</td>
+                        <td class="text-center">
+                            {{ $t->tanggal_close ? \Carbon\Carbon::parse($t->tanggal_close)->format('d M Y') : '-' }}
+                        </td>
+                        <td class="text-center">{{ number_format($t->durasi, 0) }} Hari</td>
+                        <td class="text-center"><span class="status-badge" >{{ strtoupper($t->status) }}</span></td>
+                        <td>{{ $t->ce }}</td>
+                    </tr>
                     @empty
-                        <tr>
-                            <td colspan="7" style="text-align:center; padding:18px; font-weight:900; color:#6f8797;">
-                                Data close ticket tidak ditemukan.
-                            </td>
-                        </tr>
+                    <tr>
+                        <td colspan="11" class="text-center py-4 text-muted">Data close ticket tidak ditemukan.</td>
+                    </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
+{{-- MODAL FILTER --}}
+<div class="modal fade" id="modalFilter" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Filter Data Tiket</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="GET" action="{{ route('close.ticket') }}">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">Kategori</label>
+                            <select name="kategori" class="form-select">
+                                <option value="">Semua Kategori</option>
+                                <option value="BMN" {{ request('kategori') == 'BMN' ? 'selected' : '' }}>BMN</option>
+                                <option value="SL" {{ request('kategori') == 'SL' ? 'selected' : '' }}>SL</option>
+                            </select>
+                        </div>
 
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Dari Tanggal</label>
+                            <input type="date" name="tgl_mulai" class="form-control" value="{{ request('tgl_mulai') }}">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Sampai Tanggal</label>
+                            <input type="date" name="tgl_selesai" class="form-control" value="{{ request('tgl_selesai') }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="{{ route('open.ticket') }}" class="btn btn-light border">Reset</a>
+                    <button type="submit" class="btn btn-primary">Terapkan Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
         {{-- PAGINATION --}}
-        <div class="pagination-wrap">
-            <div class="info">
+        <div class="d-flex justify-content-between align-items-center p-3">
+            <div class="small text-muted">
                 Showing {{ $tickets->firstItem() ?? 0 }} to {{ $tickets->lastItem() ?? 0 }} of {{ $tickets->total() }} results
             </div>
-
             <div>
                 {{ $tickets->appends(['q' => $search])->links() }}
             </div>
         </div>
-
     </div>
-</div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    {{-- Script untuk submit form pencarian otomatis setelah user berhenti mengetik selama 500ms --}}
+    <script>
+        // Search Otomatis
+        let timeout = null;
+        const searchInput = document.getElementById('searchInput');
+        const form = searchInput.closest('form');
+
+        searchInput.addEventListener('input', function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                form.submit();
+            }, 500); 
+        });
+
+        // Autofocus kursor
+        searchInput.focus();
+        const val = searchInput.value;
+        searchInput.value = '';
+        searchInput.value = val;
+
+        // SweetAlert untuk Sukses (Import/Store)
+        @if(session('success'))
+            Swal.fire({ icon: 'success', title: 'Berhasil!', text: "{{ session('success') }}", timer: 2000, showConfirmButton: false });
+        @endif
+    </script>
+    {{-- Script untuk submit form pencarian otomatis setelah user berhenti mengetik selama 500ms --}}
+<script>
+    let timeout = null;
+    const searchInput = document.getElementById('searchInput');
+    const form = searchInput.closest('form');
+
+    searchInput.addEventListener('input', function() {
+        // Hapus timeout sebelumnya jika user masih mengetik
+        clearTimeout(timeout);
+
+        // Setel waktu tunggu 500ms setelah ketikan terakhir
+        timeout = setTimeout(() => {
+            form.submit();
+        }, 100); 
+    });
+
+    // Pindahkan kursor ke akhir teks setelah refresh halaman
+    searchInput.focus();
+    const val = searchInput.value;
+    searchInput.value = '';
+    searchInput.value = val;
+</script>
 </body>
 </html>

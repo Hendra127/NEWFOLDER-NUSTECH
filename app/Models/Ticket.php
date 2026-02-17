@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Ticket extends Model
 {
@@ -26,5 +27,12 @@ class Ticket extends Model
     public function site()
     {
         return $this->belongsTo(Site::class);
+    }
+    public function getDurasiAttribute()
+    {
+        if (!$this->tanggal_rekap) return 0;
+
+        // diffInDays secara otomatis mengembalikan angka bulat (integer)
+        return \Carbon\Carbon::parse($this->tanggal_rekap)->diffInDays(\Carbon\Carbon::now());
     }
 }
