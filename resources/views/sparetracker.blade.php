@@ -197,15 +197,32 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach ($data as $item)
                 <tr>
-                    <td colspan="16" class="empty text-center">
-                        Showing 0 of 0 results
-                    </td>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $item->sn }}</td>
+                    <td>{{ $item->nama_perangkat }}</td>
+                    <td>{{ $item->jenis }}</td>
+                    <td>{{ $item->type }}</td>
+                    <td>{{ $item->kondisi }}</td>
+                    <td>{{ $item->pengadaan_by }}</td>
+                    <td>{{ $item->lokasi_asal }}</td>
+                    <td>{{ $item->lokasi }}</td>
+                    <td>{{ $item->tanggal_masuk }}</td>
+                    <td>{{ $item->tanggal_keluar }}</td>
+                    <td>{{ $item->status_penggunaan_sparepart }}</td>
+                    <td>{{ $item->lokasi_realtime }}</td>
+                    <td>{{ $item->kabupaten }}</td>
+                    <td>{{ $item->layanan_ai }}</td>
+                    <td>{{ $item->keterangan }}</td>
+                </tr>
+                @endforeach
+                <tr class="row-grand-total">
+                    <td colspan="16" class="text-center">GRAND TOTAL</td>
                 </tr>
             </tbody>
         </table>
     </div>
-
 </div>
     
 

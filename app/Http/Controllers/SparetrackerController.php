@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Sparetracker;
-use App\Models\Datasite;
+use App\Models\Site;
 
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\LogTrackerImport;
@@ -69,7 +69,7 @@ class SparetrackerController extends Controller
 
         $spare = Sparetracker::create($validated);
 
-        $this->syncDatasiteSN($spare);
+        $this->syncSiteSN($spare);
 
         return redirect()->back()->with('success', 'Data berhasil ditambahkan.');
     }
@@ -100,7 +100,7 @@ class SparetrackerController extends Controller
 
         $data->update($validated);
 
-        $this->syncDatasiteSN($data);
+        $this->syncSiteSN($data);
 
         return redirect()->back()->with('success', 'Data berhasil diperbarui.');
     }
@@ -114,17 +114,17 @@ class SparetrackerController extends Controller
     }
 
     /**
-     * Sinkron SN ke tabel datasite (berdasarkan lokasi_realtime = sitename)
+     * Sinkron SN ke tabel sites berdasarkan lokasi_realtime = sitename
      */
-    private function syncDatasiteSN(Sparetracker $spare)
+    private function syncSiteSN(Sparetracker $spare)
     {
         if (!$spare->lokasi_realtime) {
             return;
         }
 
-        $datasite = Datasite::where('sitename', $spare->lokasi_realtime)->first();
+        $site = Site::where('sitename', $spare->lokasi_realtime)->first();
 
-        if (!$datasite) {
+        if (!$site) {
             return;
         }
 
@@ -132,38 +132,38 @@ class SparetrackerController extends Controller
 
         switch ($jenis) {
             case 'MODEM':
-                $datasite->sn_modem = $spare->sn;
+                $site->sn_modem = $spare->sn;
                 break;
 
             case 'ROUTER':
-                $datasite->sn_router = $spare->sn;
+                $site->sn_router = $spare->sn;
                 break;
 
             case 'SWITCH':
-                $datasite->sn_switch = $spare->sn;
+                $site->sn_switch = $spare->sn;
                 break;
 
             case 'AP1':
             case 'ACCESS POINT 1':
             case 'AP 1':
-                $datasite->sn_ap1 = $spare->sn;
+                $site->sn_ap1 = $spare->sn;
                 break;
 
             case 'AP2':
             case 'ACCESS POINT 2':
             case 'AP 2':
-                $datasite->sn_ap2 = $spare->sn;
+                $site->sn_ap2 = $spare->sn;
                 break;
 
             case 'STAVOL':
             case 'STABILIZER':
-                $datasite->sn_stabilizer = $spare->sn;
+                $site->sn_stabilizer = $spare->sn;
                 break;
 
             default:
                 return;
         }
 
-        $datasite->save();
+        $site->save();
     }
 }

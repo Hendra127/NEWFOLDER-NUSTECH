@@ -62,9 +62,12 @@ Route::get('/summary', [App\Http\Controllers\SummaryController::class, 'index'])
 // To Do List Routes
 Route::get('/todolist', [App\Http\Controllers\TodolistController::class, 'index'])->name('todolist');
 
+// --- LAPORAN PM ROUTES ---
+Route::get('/laporanpm', [LaporanpmController::class, 'index'])->name('laporanpm');
+Route::post('/laporanpm/store', [LaporanpmController::class, 'store'])->name('laporanpm.store');
+
 // --- MODUL LAINNYA ---
 Route::get('/mydashboard', [MyDashboardController::class, 'index'])->name('mydashboard');
-Route::get('/laporanpm', [LaporanpmController::class, 'index'])->name('laporanpm');
 Route::get('/PMLiberta', [PMLibertaController::class, 'index'])->name('pmliberta');
 Route::get('/detail-ticket', [DetailTicketDashboardController::class, 'index'])->name('detail.ticket.dashboard');
 Route::get('/summary-ticket', [SummaryTicketController::class, 'index'])->name('summary.ticket');
