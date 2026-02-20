@@ -41,12 +41,11 @@ Route::put('/open-ticket/close/{id}', [OpenTicketController::class, 'closeTicket
 // --- DATA PAS ROUTES ---
 Route::get('/datapass', [DatapasController::class, 'index'])->name('datapas');
 Route::post('/datapas/store', [DatapasController::class, 'store'])->name('datapas.store');
-<<<<<<< HEAD
+
 Route::get('/datapas/export', [DatapasController::class, 'export'])->name('datapas.export');
 Route::post('/datapas/import', [DatapasController::class, 'import'])->name('datapas.import');
 Route::put('/datapass/{id}', [DatapasController::class, 'update'])->name('datapas.update');
 Route::delete('/datapass/{id}', [DatapasController::class, 'destroy'])->name('datapas.destroy');
-=======
 
 // Pergantian Perangkat Routes
 Route::get('/pergantianperangkat', [App\Http\Controllers\PergantianController::class, 'index'])->name('pergantianperangkat');
@@ -71,11 +70,17 @@ Route::get('/todolist', [App\Http\Controllers\TodolistController::class, 'index'
 // --- LAPORAN PM ROUTES ---
 Route::get('/laporanpm', [LaporanpmController::class, 'index'])->name('laporanpm');
 Route::post('/laporanpm/store', [LaporanpmController::class, 'store'])->name('laporanpm.store');
->>>>>>> 10a84f6993d98ea0aa20474ee7340f8046e383ea
 
-// --- MODUL LAINNYA ---
+// --- MY DASHBOARD ROUTES ---
 Route::get('/mydashboard', [MyDashboardController::class, 'index'])->name('mydashboard');
+
+// --- PM LIBERTA ROUTES ---
 Route::get('/PMLiberta', [PMLibertaController::class, 'index'])->name('pmliberta');
+Route::post('/PMLiberta/import', [PMLibertaController::class, 'import'])->name('pmliberta.import');
+Route::get('/PMLiberta/export', [PMLibertaController::class, 'export'])->name('pmliberta.export');
+Route::put('/PMLiberta/{id}', [PMLibertaController::class, 'update'])->name('pmliberta.update');
+Route::delete('/PMLiberta/{id}', [PMLibertaController::class, 'destroy'])->name('pmliberta.destroy');
+
 Route::get('/detail-ticket', [DetailTicketDashboardController::class, 'index'])->name('detail.ticket.dashboard');
 Route::get('/summary-ticket', [SummaryTicketController::class, 'index'])->name('summary.ticket');
 Route::get('/pergantianperangkat', [PergantianController::class, 'index'])->name('pergantianperangkat');

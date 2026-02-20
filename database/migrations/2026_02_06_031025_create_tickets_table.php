@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('site_id')->constrained()->cascadeOnDelete();
+            $table->string('site_code')->nullable();
             $table->string('kategori');
             $table->string('status');
             $table->integer('durasi')->default(0);

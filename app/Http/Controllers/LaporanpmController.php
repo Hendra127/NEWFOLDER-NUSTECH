@@ -11,7 +11,7 @@ class LaporanPMController extends Controller
     public function index(Request $request)
     {
         // ambil semua site buat dropdown modal
-        $sites = Site::orderBy('site_name')->get();
+        $sites = Site::orderBy('sitename')->get();
 
         // query laporan pm
         $query = LaporanPM::query()
