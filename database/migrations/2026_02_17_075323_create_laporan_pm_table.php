@@ -17,7 +17,6 @@ return new class extends Migration
         $table->string('site_id'); // mengikuti site_id kamu yang varchar
         $table->string('pm_bulan');
         $table->string('teknisi');
-        $table->string('status');
         $table->timestamps();
     });
 }
