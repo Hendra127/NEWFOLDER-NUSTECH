@@ -48,10 +48,10 @@ Route::delete('/datapass/{id}', [DatapasController::class, 'destroy'])->name('da
 
 
 // Pergantian Perangkat Routes
-Route::get('/pergantianperangkat', [App\Http\Controllers\PergantianController::class, 'index'])->name('pergantianperangkat');
+Route::get('/pergantianperangkat', [PergantianController::class, 'index'])->name('pergantianperangkat.index');
 
 // Log Pergantian Routes
-Route::get('/logpergantian', [App\Http\Controllers\LogpergantianController::class, 'index'])->name('logpergantian');
+Route::get('/logpergantian', [LogpergantianController::class, 'index'])->name('logpergantian.index');
 
 // Spare Tracker Routes
 Route::get('/sparetracker', [SparetrackerController::class, 'index'])->name('sparetracker.index');
@@ -62,10 +62,10 @@ Route::post('/sparetracker/update', [SparetrackerController::class, 'update'])->
 Route::delete('/sparetracker/delete/{id}', [SparetrackerController::class, 'destroy'])->name('sparetracker.destroy');
 
 // Summary Routes
-Route::get('/summary', [App\Http\Controllers\SummaryController::class, 'index'])->name('summaryperangkat');
+Route::get('/summary', [SummaryController::class, 'index'])->name('summaryperangkat');
 
 // To Do List Routes
-Route::get('/todolist', [App\Http\Controllers\TodolistController::class, 'index'])->name('todolist');
+Route::get('/todolist', [TodolistController::class, 'index'])->name('todolist');
 
 // --- LAPORAN PM ROUTES ---
 Route::get('/laporanpm', [LaporanpmController::class, 'index'])->name('laporanpm');
@@ -73,13 +73,15 @@ Route::post('/laporanpm/store', [LaporanpmController::class, 'store'])->name('la
 Route::put('/laporanpm/{id}', [LaporanpmController::class, 'update'])->name('laporanpm.update');
 Route::delete('/laporanpm/{id}', [LaporanpmController::class, 'destroy'])->name('laporanpm.destroy');
 
-// --- MODUL LAINNYA ---
+// --- MY DASHBOARD ROUTES ---
 Route::get('/mydashboard', [MyDashboardController::class, 'index'])->name('mydashboard');
+
+// --- PM LIBERTA ROUTES ---
 Route::get('/PMLiberta', [PMLibertaController::class, 'index'])->name('pmliberta');
+Route::post('/PMLiberta/import', [PMLibertaController::class, 'import'])->name('pmliberta.import');
+Route::get('/PMLiberta/export', [PMLibertaController::class, 'export'])->name('pmliberta.export');
+Route::put('/PMLiberta/{id}', [PMLibertaController::class, 'update'])->name('pmliberta.update');
+Route::delete('/PMLiberta/{id}', [PMLibertaController::class, 'destroy'])->name('pmliberta.destroy');
+
 Route::get('/detail-ticket', [DetailTicketDashboardController::class, 'index'])->name('detail.ticket.dashboard');
 Route::get('/summary-ticket', [SummaryTicketController::class, 'index'])->name('summary.ticket');
-Route::get('/pergantianperangkat', [PergantianController::class, 'index'])->name('pergantianperangkat');
-Route::get('/logpergantian', [LogpergantianController::class, 'index'])->name('logpergantian');
-Route::get('/sparetracker', [SparetrackerController::class, 'index'])->name('sparetracker');
-Route::get('/summary', [SummaryController::class, 'index'])->name('summaryperangkat');
-Route::get('/todolist', [TodolistController::class, 'index'])->name('todolist');

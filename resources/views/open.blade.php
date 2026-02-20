@@ -97,7 +97,13 @@
                         <td>{{ $t->site_code }}</td>
                         <td>{{ $t->nama_site }}</td>
                         <td class="text-center">
-                            {{ \Carbon\Carbon::parse($t->tanggal_rekap)->diffInDays(now()) }} Hari
+                            @php
+                                $tanggalRekap = \Carbon\Carbon::parse($t->tanggal_rekap)->startOfDay();
+                                $hariIni = now()->startOfDay();
+                                $durasi = $tanggalRekap->diffInDays($hariIni);
+                            @endphp
+
+                            {{ $durasi }} Hari
                         </td>
                         <td>{{ \Carbon\Carbon::parse($t->tanggal_rekap)->format('d M Y') }}</td>
                         <td>{{ $t->provinsi }}</td>

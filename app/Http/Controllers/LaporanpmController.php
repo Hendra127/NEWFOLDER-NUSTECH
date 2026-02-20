@@ -10,6 +10,8 @@ class LaporanPMController extends Controller
 {
     public function index(Request $request)
     {
+
+        // ambil semua site buat dropdown modal
         $sites = Site::orderBy('sitename')->get();
 
         $query = LaporanPM::query()->orderBy('created_at', 'desc');
@@ -37,9 +39,14 @@ class LaporanPMController extends Controller
             'site_id'        => 'required|string',
             'pm_bulan'       => 'required|string',
             'teknisi'        => 'required|string|max:100',
-            'status'         => 'required|string', // Ubah dari status_laporan ke status
-            'masalah_kendala'        => 'nullable|string', // Pastikan divalidasi
-            // ... field lainnya
+            'status'         => 'required|string',
+            'masalah_kendala' => 'nullable|string',
+            'lokasi_site'    => 'nullable|string',
+            'kabupaten_kota' => 'nullable|string',
+            'provinsi'       => 'nullable|string',
+            'laporan_ba_pm'  => 'nullable|string',
+            'action'         => 'nullable|string',
+            'ket_tambahan'   => 'nullable|string',
         ]);
 
         $site = Site::where('site_id', $request->site_id)->first();
@@ -64,8 +71,9 @@ class LaporanPMController extends Controller
         ]);
 
         return redirect()->route('laporanpm')->with('success', 'Data berhasil disimpan!');
-    }
-    public function update(Request $request, $id)
+}
+
+public function update(Request $request, $id)
 {
     $request->validate([
         'tanggal_submit' => 'required|date',
@@ -81,7 +89,7 @@ class LaporanPMController extends Controller
         'action'          => $request->action,
         'ket_tambahan'    => $request->ket_tambahan,
         'status'          => $request->status,
-        'status_laporan'  => $request->status, // Samakan jika kolomnya berbeda
+        'status_laporan'  => $request->status,
     ]);
 
     return redirect()->back()->with('success', 'Data berhasil diperbarui!');
