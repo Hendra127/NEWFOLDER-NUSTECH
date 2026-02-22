@@ -48,13 +48,13 @@ Route::delete('/datapass/{id}', [DatapasController::class, 'destroy'])->name('da
 
 
 // Pergantian Perangkat Routes
-Route::get('/pergantianperangkat', [PergantianController::class, 'index'])->name('pergantianperangkat.index');
+Route::get('/pergantianperangkat', [PergantianController::class, 'index'])->name('pergantianperangkat');
 
 // Log Pergantian Routes
-Route::get('/logpergantian', [LogpergantianController::class, 'index'])->name('logpergantian.index');
+Route::get('/logpergantian', [LogpergantianController::class, 'index'])->name('logpergantian');
 
 // Spare Tracker Routes
-Route::get('/sparetracker', [SparetrackerController::class, 'index'])->name('sparetracker.index');
+Route::get('/sparetracker', [SparetrackerController::class, 'index'])->name('sparetracker');
 Route::post('/sparetracker/import', [SparetrackerController::class, 'import'])->name('sparetracker.import');
 Route::get('/sparetracker/export', [SparetrackerController::class, 'export'])->name('sparetracker.export');
 Route::post('/sparetracker/store', [SparetrackerController::class, 'store'])->name('sparetracker.store');
