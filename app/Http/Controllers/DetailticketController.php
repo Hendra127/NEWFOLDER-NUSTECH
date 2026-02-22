@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\DB;
 
-class DetailTicketDashboardController extends Controller
+class DetailticketController extends Controller
 {
     public function index()
     {
@@ -38,7 +38,7 @@ class DetailTicketDashboardController extends Controller
         $kabLabels = $openByKabRaw->pluck('kabupaten')->toArray();
         $kabTotals = $openByKabRaw->pluck('total')->toArray();
 
-        return view('detail_dashboard', compact(
+        return view('detailticket', compact(
             'openTickets',
             'closeLabels',
             'closeTotals',

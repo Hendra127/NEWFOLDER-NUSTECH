@@ -1,11 +1,26 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Ticket</title>
-
+    <title>Ticket Page - Summary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/password.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<header class="main-header">
+        <div class="header-brand">
+            Project <span class="separator">|</span> Operational
+        </div>
+        <div class="user-profile-icon">
+            <i class="bi bi-person-circle"></i>
+        </div>
+    </header>
 
     <style>
         :root{
@@ -196,35 +211,20 @@
             .ticket-list{ height: 260px; }
         }
     </style>
-</head>
 
-<body>
 
-{{-- NAVBAR --}}
-<div class="ticket-navbar">
-    <div class="nav-left">
-        <div class="nav-item">Project</div>
-        <div class="nav-item">Operational</div>
-    </div>
 
-    <div class="nav-right">
-        <div class="avatar">
-            <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
-                <path d="M12 12a4.5 4.5 0 1 0-4.5-4.5A4.5 4.5 0 0 0 12 12Z" stroke="currentColor" stroke-width="2"/>
-                <path d="M20 20a8 8 0 0 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-        </div>
-    </div>
-</div>
 
 <div class="ticket-page">
 
     {{-- MENU --}}
-    <div class="ticket-controls">
-        <a class="pill" href="{{ route('open.ticket') }}">Open Ticket</a>
-        <a class="pill" href="{{ route('close.ticket') }}">Close Ticket</a>
-        <a class="pill is-active" href="{{ route('detail.ticket.dashboard') }}">Detail Ticket</a>
-        <a class="pill" href="{{ route('summary.ticket') }}">Summary</a>
+    <div class="flex justify-between items-center mb-6">
+        <div class="tabs-section">
+        <a href="{{ url('/open-ticket') }}" class="tab {{ request()->is('open-ticket*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Open Tiket</a>
+        <a href="{{ url('/close-ticket') }}" class="tab {{ request()->is('close-ticket*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Close Tiket</a>
+        <a href="{{ url('/detailticket') }}" class="tab {{ request()->is('detailticket*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Detail Tiket</a>
+        <a href="{{ url('/summaryticket') }}" class="tab {{ request()->is('summaryticket*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Summary Tiket</a>
+    </div>
     </div>
 
     <div class="grid">

@@ -7,7 +7,7 @@ use App\Http\Controllers\DatapasController;
 use App\Http\Controllers\LaporanpmController;
 use App\Http\Controllers\PMLibertaController;
 use App\Http\Controllers\CloseTicketController;
-use App\Http\Controllers\DetailTicketDashboardController;
+use App\Http\Controllers\DetailticketController;
 use App\Http\Controllers\SummaryTicketController;
 use App\Http\Controllers\PergantianController;
 use App\Http\Controllers\LogpergantianController;
@@ -37,6 +37,9 @@ Route::post('/close-ticket/store', [CloseTicketController::class, 'store'])->nam
 Route::get('/close-ticket/export', [CloseTicketController::class, 'export'])->name('close.ticket.export');
 Route::post('/close-ticket/import', [CloseTicketController::class, 'import'])->name('close.ticket.import');
 Route::put('/open-ticket/close/{id}', [OpenTicketController::class, 'closeTicket'])->name('open.ticket.close');
+Route::get('/summaryticket', [SummaryTicketController::class, 'index'])->name('summaryticket');
+Route::get('/detailticket', [DetailticketController::class, 'index'])->name('detailticket');
+
 
 // --- DATA PAS ROUTES ---
 Route::get('/datapass', [DatapasController::class, 'index'])->name('datapas');
@@ -48,21 +51,21 @@ Route::delete('/datapass/{id}', [DatapasController::class, 'destroy'])->name('da
 
 
 // Pergantian Perangkat Routes
-Route::get('/pergantianperangkat', [PergantianController::class, 'index'])->name('pergantianperangkat.index');
+Route::get('/pergantianperangkat', [PergantianController::class, 'index'])->name('pergantianperangkat');
 
 // Log Pergantian Routes
-Route::get('/logpergantian', [LogpergantianController::class, 'index'])->name('logpergantian.index');
+Route::get('/logpergantian', [LogpergantianController::class, 'index'])->name('logpergantian');
 
 // Spare Tracker Routes
-Route::get('/sparetracker', [SparetrackerController::class, 'index'])->name('sparetracker.index');
+Route::get('/sparetracker', [SparetrackerController::class, 'index'])->name('sparetracker');
 Route::post('/sparetracker/import', [SparetrackerController::class, 'import'])->name('sparetracker.import');
 Route::get('/sparetracker/export', [SparetrackerController::class, 'export'])->name('sparetracker.export');
 Route::post('/sparetracker/store', [SparetrackerController::class, 'store'])->name('sparetracker.store');
 Route::post('/sparetracker/update', [SparetrackerController::class, 'update'])->name('sparetracker.update');
 Route::delete('/sparetracker/delete/{id}', [SparetrackerController::class, 'destroy'])->name('sparetracker.destroy');
 
-// Summary Routes
-Route::get('/summary', [SummaryController::class, 'index'])->name('summaryperangkat');
+
+
 
 // To Do List Routes
 Route::get('/todolist', [TodolistController::class, 'index'])->name('todolist');
@@ -83,5 +86,6 @@ Route::get('/PMLiberta/export', [PMLibertaController::class, 'export'])->name('p
 Route::put('/PMLiberta/{id}', [PMLibertaController::class, 'update'])->name('pmliberta.update');
 Route::delete('/PMLiberta/{id}', [PMLibertaController::class, 'destroy'])->name('pmliberta.destroy');
 
-Route::get('/detail-ticket', [DetailTicketDashboardController::class, 'index'])->name('detail.ticket.dashboard');
-Route::get('/summary-ticket', [SummaryTicketController::class, 'index'])->name('summary.ticket');
+
+
+

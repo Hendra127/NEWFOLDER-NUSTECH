@@ -55,8 +55,8 @@
     <div class="tabs-section d-flex align-items-center">
     <a href="{{ url('/open-ticket') }}" class="tab {{ request()->is('open-ticket*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Open Tiket</a>
     <a href="{{ url('/close-ticket') }}" class="tab {{ request()->is('close-ticket*') ? 'active' : '' }}" style="text-decoration: none; color: White;">Close Tiket</a>
-    <a href="{{ url('/detail-ticket') }}" class="tab {{ request()->is('detail-ticket*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Detail Tiket</a>
-    <a href="{{ url('/summary-ticket') }}" class="tab {{ request()->is('closummary-ticket*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Summary Tiket</a>
+    <a href="{{ url('/detailticket') }}" class="tab {{ request()->is('detailticket*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Detail Tiket</a>
+    <a href="{{ url('/summaryticket') }}" class="tab {{ request()->is('summaryticket*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Summary Tiket</a>
     <span class="summary-badge text-success ms-auto">Total Close: <b>{{ $closeAllCount }}</b></span>
     <span class="summary-badge text-success">Close Hari Ini: <b>{{ $todayCount }}</b></span>
 </div>

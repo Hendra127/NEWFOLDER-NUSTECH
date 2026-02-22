@@ -10,29 +10,17 @@ class SummaryTicketController extends Controller
 {
     public function index(Request $request)
     {
-        // filter bulan (format: YYYY-MM)
+        // 1. Filter bulan (format: YYYY-MM) dari request dropdown
         $month = $request->month;
 
-        // =========================
-        // FILTER QUERY BASE
-        // =========================
-        $base = Ticket::query();
-
-        if ($month) {
-            $base->whereRaw("DATE_FORMAT(created_at, '%Y-%m') = ?", [$month]);
-        }
-
-        // =========================
-        // DROPDOWN MONTHS
-        // =========================
+        // 2. Ambil list bulan untuk dropdown (hanya bulan yang ada datanya)
         $months = Ticket::selectRaw("DATE_FORMAT(created_at, '%Y-%m') as ym")
             ->groupBy('ym')
             ->orderByDesc('ym')
             ->pluck('ym');
 
-        // =========================
-        // CHART 1: OPEN TICKET PER BULAN (bar)
-        // =========================
+        // 3. CHART 1: OPEN TICKET PER BULAN (Bar Chart)
+        // Menampilkan total tiket berstatus 'open' per bulan (0-12)
         $openPerMonthRaw = Ticket::selectRaw("MONTH(created_at) as m, COUNT(*) as total")
             ->where('status', 'open')
             ->when($month, function($q) use ($month){
@@ -42,10 +30,8 @@ class SummaryTicketController extends Controller
             ->orderBy('m')
             ->get();
 
-        // bikin label 0-12 seperti gambar
         $openLabels = range(0, 12);
         $openTotals = array_fill(0, 13, 0);
-
         foreach ($openPerMonthRaw as $row) {
             $idx = (int)$row->m;
             if ($idx >= 0 && $idx <= 12) {
@@ -53,9 +39,6 @@ class SummaryTicketController extends Controller
             }
         }
 
-        // =========================
-        // CHART 2: DURASI OPEN TICKET (bar)
-        // =========================
         $durasiRaw = Ticket::selectRaw("FLOOR(COALESCE(durasi,0)/10) as grp, COUNT(*) as total")
             ->where('status', 'open')
             ->when($month, function($q) use ($month){
@@ -66,22 +49,16 @@ class SummaryTicketController extends Controller
             ->limit(7)
             ->get();
 
-        $durasiLabels = [];
-        $durasiTotals = [];
-
+        $durasiLabels = ['0','1','2','3','4','5','6'];
+        $durasiTotals = array_fill(0, 7, 0);
         foreach ($durasiRaw as $row) {
-            $durasiLabels[] = (string)$row->grp;
-            $durasiTotals[] = (int)$row->total;
+            $idx = (int)$row->grp;
+            if ($idx >= 0 && $idx <= 6) {
+                $durasiTotals[$idx] = (int)$row->total;
+            }
         }
 
-        if (count($durasiLabels) === 0) {
-            $durasiLabels = ['0','1','2','3','4','5','6'];
-            $durasiTotals = [0,0,0,0,0,0,0];
-        }
-
-        // =========================
-        // TABLE: OPEN & CLOSE PER BULAN (KATEGORI)
-        // =========================
+  
         $kategoriSummary = Ticket::selectRaw("
                 kategori,
                 SUM(CASE WHEN status='close' THEN 1 ELSE 0 END) as close_total,
@@ -97,9 +74,6 @@ class SummaryTicketController extends Controller
         $grandClose = (int) $kategoriSummary->sum('close_total');
         $grandOpen  = (int) $kategoriSummary->sum('open_total');
 
-        // =========================
-        // TABLE: OPEN TICKET / HARI
-        // =========================
         $openByKategori = Ticket::selectRaw("kategori, COUNT(*) as total")
             ->where('status', 'open')
             ->when($month, function($q) use ($month){
@@ -111,9 +85,6 @@ class SummaryTicketController extends Controller
 
         $openGrand = (int) $openByKategori->sum('total');
 
-        // =========================
-        // TABLE: CLOSE TICKET / HARI
-        // =========================
         $closeByKategori = Ticket::selectRaw("kategori, COUNT(*) as total")
             ->where('status', 'close')
             ->when($month, function($q) use ($month){
@@ -125,9 +96,6 @@ class SummaryTicketController extends Controller
 
         $closeGrand = (int) $closeByKategori->sum('total');
 
-        // =========================
-        // TABLE BAWAH: KABUPATEN
-        // =========================
         $kabupatenTable = Ticket::selectRaw("
                 kabupaten,
                 COUNT(*) as status_total,
@@ -141,7 +109,7 @@ class SummaryTicketController extends Controller
             ->limit(13)
             ->get();
 
-        return view('summary', compact(
+        return view('summaryticket', compact(
             'month',
             'months',
             'openLabels',
