@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Ticket;
 use App\Models\PMLiberta; // Import model PMLiberta
 use Carbon\Carbon;
+use App\Models\Message; // Import model Message
 
 class MyDashboardController extends Controller
 {
@@ -84,4 +85,52 @@ class MyDashboardController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+public function fetchMessages() {
+    $currentUserId = auth()->id();
+    $currentIp = request()->ip(); // Menggunakan IP sebagai penanda Guest
+
+    $messages = \App\Models\Message::with(['user', 'parent.user'])
+        ->latest()
+        ->take(50)
+        ->get()
+        ->reverse()
+        ->map(function ($msg) use ($currentUserId) {
+            $msg->is_me = auth()->check() ? ($msg->user_id === $currentUserId) : is_null($msg->user_id);
+            
+            // Tambahkan baris ini untuk mendeteksi apakah pengirim adalah admin
+            // Kita cek dari relasi user-nya
+            $msg->is_sender_admin = $msg->user ? (bool)$msg->user->is_admin : (bool)$msg->is_admin;
+            
+            return $msg;
+        })
+        ->values();
+
+    return response()->json($messages);
+}
+public function storeMessage(Request $request)
+{
+    $request->validate([
+        'message' => 'required|string',
+        'guest_name' => 'nullable|string|max:50',
+        'parent_id' => 'nullable|exists:messages,id'
+    ]);
+
+    $user = auth()->user();
+
+    $chat = \App\Models\Message::create([
+        'user_id'    => auth()->check() ? auth()->id() : null,
+        'guest_name' => !auth()->check() ? $request->guest_name : null,
+        'message'    => $request->message,
+        'parent_id'  => $request->parent_id,
+        // Kolom is_admin di database (status pesan)
+        'is_admin'   => auth()->check() ? ($user->is_admin ?? false) : false,
+    ]);
+
+    $chat->load(['user', 'parent.user']);
+
+    // Tambahkan atribut tambahan agar JS bisa langsung baca label (ADMIN)
+    $chat->is_sender_admin = $user ? (bool)$user->is_admin : false;
+
+    return response()->json($chat);
+}
 }

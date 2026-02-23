@@ -15,75 +15,98 @@ use App\Http\Controllers\SparetrackerController;
 use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\TodolistController;
 use App\Http\Controllers\MyDashboardController;
+use App\Http\Controllers\AuthController; // Pastikan Anda punya controller untuk login
 
-// --- SITES / DATASITE ROUTES ---
-Route::get('/sites/export', [SiteController::class, 'export'])->name('sites.export');
-Route::post('/sites/import', [SiteController::class, 'import'])->name('sites.import');
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
+// --- MY DASHBOARD & CHAT ROUTES ---
+    Route::get('/dashboard', [MyDashboardController::class, 'index'])->name('mydashboard');
+    Route::get('/ticket/detail/{site_code}', [MyDashboardController::class, 'getDetail']);
+    Route::post('/chat/send', [MyDashboardController::class, 'storeMessage'])->name('chat.send');
+    Route::get('/chat/fetch', [MyDashboardController::class, 'fetchMessages'])->name('chat.fetch');
+    
+// --- PUBLIC ROUTES (Bisa diakses tanpa login) ---
+Route::get('/', function () {
+    return redirect()->route('login');
+});
 
-Route::resource('sites', SiteController::class)->names(['index' => 'datasite'
-])->except(['show', 'create', 'edit']);
-
-// --- OPEN TICKET ROUTES ---
-Route::get('/open-ticket', [OpenTicketController::class, 'index'])->name('open.ticket');
-Route::post('/open-ticket/store', [OpenTicketController::class, 'store'])->name('open.ticket.store');
-Route::get('/open-ticket/export', [OpenTicketController::class, 'export'])->name('open.ticket.export');
-Route::post('/open-ticket/import', [OpenTicketController::class, 'import'])->name('open.ticket.import');
-Route::put('/open-ticket/{id}', [OpenTicketController::class, 'update'])->name('open.ticket.update');
-Route::delete('/open-ticket/{id}', [OpenTicketController::class, 'destroy'])->name('open.ticket.destroy');
-
-// --- CLOSE TICKET ROUTES ---
-Route::get('/close-ticket', [CloseTicketController::class, 'index'])->name('close.ticket');
-Route::post('/close-ticket/store', [CloseTicketController::class, 'store'])->name('close.ticket.store');
-Route::get('/close-ticket/export', [CloseTicketController::class, 'export'])->name('close.ticket.export');
-Route::post('/close-ticket/import', [CloseTicketController::class, 'import'])->name('close.ticket.import');
-Route::put('/open-ticket/close/{id}', [OpenTicketController::class, 'closeTicket'])->name('open.ticket.close');
-Route::get('/summaryticket', [SummaryTicketController::class, 'index'])->name('summaryticket');
-Route::get('/detailticket', [DetailticketController::class, 'index'])->name('detailticket');
+// Sesuaikan dengan nama controller login Anda
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
-// --- DATA PAS ROUTES ---
-Route::get('/datapass', [DatapasController::class, 'index'])->name('datapas');
-Route::post('/datapas/store', [DatapasController::class, 'store'])->name('datapas.store');
-Route::get('/datapas/export', [DatapasController::class, 'export'])->name('datapas.export');
-Route::post('/datapas/import', [DatapasController::class, 'import'])->name('datapas.import');
-Route::put('/datapass/{id}', [DatapasController::class, 'update'])->name('datapas.update');
-Route::delete('/datapass/{id}', [DatapasController::class, 'destroy'])->name('datapas.destroy');
+// --- PROTECTED ROUTES (Harus login dulu) ---
+Route::middleware(['auth'])->group(function () {
 
+    // --- SITES / DATASITE ROUTES ---
+    Route::get('/sites/export', [SiteController::class, 'export'])->name('sites.export');
+    Route::post('/sites/import', [SiteController::class, 'import'])->name('sites.import');
+    Route::resource('sites', SiteController::class)->names(['index' => 'datasite'])->except(['show', 'create', 'edit']);
 
-// Pergantian Perangkat Routes
-Route::get('/pergantianperangkat', [PergantianController::class, 'index'])->name('pergantianperangkat');
+    // --- OPEN TICKET ROUTES ---
+    Route::prefix('open-ticket')->group(function () {
+        Route::get('/', [OpenTicketController::class, 'index'])->name('open.ticket');
+        Route::post('/store', [OpenTicketController::class, 'store'])->name('open.ticket.store');
+        Route::get('/export', [OpenTicketController::class, 'export'])->name('open.ticket.export');
+        Route::post('/import', [OpenTicketController::class, 'import'])->name('open.ticket.import');
+        Route::put('/{id}', [OpenTicketController::class, 'update'])->name('open.ticket.update');
+        Route::delete('/{id}', [OpenTicketController::class, 'destroy'])->name('open.ticket.destroy');
+        Route::put('/close/{id}', [OpenTicketController::class, 'closeTicket'])->name('open.ticket.close');
+    });
 
-// Log Pergantian Routes
-Route::get('/logpergantian', [LogpergantianController::class, 'index'])->name('logpergantian');
+    // --- CLOSE TICKET ROUTES ---
+    Route::get('/close-ticket', [CloseTicketController::class, 'index'])->name('close.ticket');
+    Route::post('/close-ticket/store', [CloseTicketController::class, 'store'])->name('close.ticket.store');
+    Route::get('/close-ticket/export', [CloseTicketController::class, 'export'])->name('close.ticket.export');
+    Route::post('/close-ticket/import', [CloseTicketController::class, 'import'])->name('close.ticket.import');
+    
+    Route::get('/summaryticket', [SummaryTicketController::class, 'index'])->name('summaryticket');
+    Route::get('/detailticket', [DetailticketController::class, 'index'])->name('detailticket');
 
-// Spare Tracker Routes
-Route::get('/sparetracker', [SparetrackerController::class, 'index'])->name('sparetracker');
-Route::post('/sparetracker/import', [SparetrackerController::class, 'import'])->name('sparetracker.import');
-Route::get('/sparetracker/export', [SparetrackerController::class, 'export'])->name('sparetracker.export');
-Route::post('/sparetracker/store', [SparetrackerController::class, 'store'])->name('sparetracker.store');
-Route::post('/sparetracker/update', [SparetrackerController::class, 'update'])->name('sparetracker.update');
-Route::delete('/sparetracker/delete/{id}', [SparetrackerController::class, 'destroy'])->name('sparetracker.destroy');
+    // --- DATA PAS ROUTES ---
+    Route::get('/datapass', [DatapasController::class, 'index'])->name('datapas');
+    Route::post('/datapas/store', [DatapasController::class, 'store'])->name('datapas.store');
+    Route::get('/datapas/export', [DatapasController::class, 'export'])->name('datapas.export');
+    Route::post('/datapas/import', [DatapasController::class, 'import'])->name('datapas.import');
+    Route::put('/datapass/{id}', [DatapasController::class, 'update'])->name('datapas.update');
+    Route::delete('/datapass/{id}', [DatapasController::class, 'destroy'])->name('datapas.destroy');
 
-// To Do List Routes
-Route::get('/todolist', [TodolistController::class, 'index'])->name('todolist');
+    // --- PERANGKAT & TRACKER ---
+    Route::get('/pergantianperangkat', [PergantianController::class, 'index'])->name('pergantianperangkat');
+    Route::get('/logpergantian', [LogpergantianController::class, 'index'])->name('logpergantian');
+    Route::get('/sparetracker', [SparetrackerController::class, 'index'])->name('sparetracker');
+    Route::post('/sparetracker/import', [SparetrackerController::class, 'import'])->name('sparetracker.import');
+    Route::get('/sparetracker/export', [SparetrackerController::class, 'export'])->name('sparetracker.export');
+    Route::post('/sparetracker/store', [SparetrackerController::class, 'store'])->name('sparetracker.store');
+    Route::post('/sparetracker/update', [SparetrackerController::class, 'update'])->name('sparetracker.update');
+    Route::delete('/sparetracker/delete/{id}', [SparetrackerController::class, 'destroy'])->name('sparetracker.destroy');
+    Route::get('/pm-summary', [SummaryController::class, 'index'])->name('summaryperangkat');
 
-// --- LAPORAN PM ROUTES ---
-Route::get('/laporanpm', [LaporanpmController::class, 'index'])->name('laporanpm');
-Route::post('/laporanpm/store', [LaporanpmController::class, 'store'])->name('laporanpm.store');
-Route::put('/laporanpm/{id}', [LaporanpmController::class, 'update'])->name('laporanpm.update');
-Route::delete('/laporanpm/{id}', [LaporanpmController::class, 'destroy'])->name('laporanpm.destroy');
+    // --- TO DO LIST ---
+    Route::get('/todolist', [TodolistController::class, 'index'])->name('todolist');
+    Route::post('/todolist/store', [TodolistController::class, 'store'])->name('todolist.store');
+    Route::post('/todolist/toggle/{id}', [TodolistController::class, 'toggle'])->name('todolist.toggle');
+    Route::post('/todolist/update/{id}', [TodolistController::class, 'update'])->name('todolist.update');
+    Route::delete('/todolist/delete/{id}', [TodolistController::class, 'destroy'])->name('todolist.destroy');
+    Route::post('/todolist/subtask/add/{id}', [TodolistController::class, 'addSubTask'])->name('subtask.add');
+    Route::post('/todolist/subtask/toggle/{id}', [TodolistController::class, 'toggleSubTask'])->name('subtask.toggle');
+    Route::post('/todolist/update-title/{id}', [TodolistController::class, 'updateTitle']);
+    Route::post('/todolist/subtask/update/{id}', [TodolistController::class, 'updateSubTask']);
 
-// --- MY DASHBOARD ROUTES ---
-Route::get('/dashboard', [MyDashboardController::class, 'index'])->name('mydashboard');
-Route::get('/ticket/detail/{site_code}', [MyDashboardController::class, 'getDetail']);
+    // --- LAPORAN PM ROUTES ---
+    Route::get('/laporanpm', [LaporanpmController::class, 'index'])->name('laporanpm');
+    Route::post('/laporanpm/store', [LaporanpmController::class, 'store'])->name('laporanpm.store');
+    Route::put('/laporanpm/{id}', [LaporanpmController::class, 'update'])->name('laporanpm.update');
+    Route::delete('/laporanpm/{id}', [LaporanpmController::class, 'destroy'])->name('laporanpm.destroy');
 
-// --- PM LIBERTA ROUTES ---
-Route::get('/PMLiberta', [PMLibertaController::class, 'index'])->name('pmliberta');
-Route::post('/PMLiberta/import', [PMLibertaController::class, 'import'])->name('pmliberta.import');
-Route::get('/PMLiberta/export', [PMLibertaController::class, 'export'])->name('pmliberta.export');
-Route::put('/PMLiberta/{id}', [PMLibertaController::class, 'update'])->name('pmliberta.update');
-Route::delete('/PMLiberta/{id}', [PMLibertaController::class, 'destroy'])->name('pmliberta.destroy');
-
-
-
-
+    // --- PM LIBERTA ROUTES ---
+    Route::get('/PMLiberta', [PMLibertaController::class, 'index'])->name('pmliberta');
+    Route::post('/PMLiberta/import', [PMLibertaController::class, 'import'])->name('pmliberta.import');
+    Route::get('/PMLiberta/export', [PMLibertaController::class, 'export'])->name('pmliberta.export');
+    Route::put('/PMLiberta/{id}', [PMLibertaController::class, 'update'])->name('pmliberta.update');
+    Route::delete('/PMLiberta/{id}', [PMLibertaController::class, 'destroy'])->name('pmliberta.destroy');
+});
