@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use App\Models\Sites;
 
 class Ticket extends Model
 {
@@ -26,7 +27,7 @@ class Ticket extends Model
 
     public function site()
     {
-        return $this->belongsTo(Site::class);
+        return $this->belongsTo(Site::class, 'site_code', 'site_code');
     }
     public function getDurasiAttribute()
     {

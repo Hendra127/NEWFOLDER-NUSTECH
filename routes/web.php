@@ -64,9 +64,6 @@ Route::post('/sparetracker/store', [SparetrackerController::class, 'store'])->na
 Route::post('/sparetracker/update', [SparetrackerController::class, 'update'])->name('sparetracker.update');
 Route::delete('/sparetracker/delete/{id}', [SparetrackerController::class, 'destroy'])->name('sparetracker.destroy');
 
-
-
-
 // To Do List Routes
 Route::get('/todolist', [TodolistController::class, 'index'])->name('todolist');
 
@@ -77,7 +74,8 @@ Route::put('/laporanpm/{id}', [LaporanpmController::class, 'update'])->name('lap
 Route::delete('/laporanpm/{id}', [LaporanpmController::class, 'destroy'])->name('laporanpm.destroy');
 
 // --- MY DASHBOARD ROUTES ---
-Route::get('/mydashboard', [MyDashboardController::class, 'index'])->name('mydashboard');
+Route::get('/dashboard', [MyDashboardController::class, 'index'])->name('mydashboard');
+Route::get('/ticket/detail/{site_code}', [MyDashboardController::class, 'getDetail']);
 
 // --- PM LIBERTA ROUTES ---
 Route::get('/PMLiberta', [PMLibertaController::class, 'index'])->name('pmliberta');

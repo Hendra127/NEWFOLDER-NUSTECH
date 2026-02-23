@@ -1,0 +1,16 @@
+.site-detail-list {
+    padding: 5px 0 10px 20px;
+    border-left: 1px solid #444; /* Garis vertikal tipis agar estetis */
+    margin-top: 5px;
+}
+
+.site-detail-list li {
+    margin-bottom: 3px;
+    text-transform: uppercase;
+}
+
+.ticket-row-container {
+    border-bottom: 1px solid #333; /* Pemisah antar kategori problem */
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
