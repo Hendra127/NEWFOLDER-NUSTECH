@@ -20,7 +20,7 @@
                     <li><a href="{{ route('datapas') }}"><i class="fas fa-chevron-right"></i> Manajemen Password</a></li>
                     <li><a href="{{ route('laporanpm') }}"><i class="fas fa-chevron-right"></i> Laporan PM</a></li>
                     <li><a href="{{ route('pmliberta') }}"><i class="fas fa-chevron-right"></i> PM Liberta</a></li>
-                    <li><a href="{{ route('summaryperangkat') }}"><i class="fas fa-chevron-right"></i> Summary PM</a></li>
+                    <li><a href="{{ route('summarypm') }}"><i class="fas fa-chevron-right"></i> Summary PM</a></li>
                 </ul>
             </div>
 

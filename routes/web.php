@@ -16,6 +16,8 @@ use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\TodolistController;
 use App\Http\Controllers\MyDashboardController;
 use App\Http\Controllers\AuthController; // Pastikan Anda punya controller untuk login
+use App\Http\Controllers\SummaryPMController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -109,4 +111,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/PMLiberta/export', [PMLibertaController::class, 'export'])->name('pmliberta.export');
     Route::put('/PMLiberta/{id}', [PMLibertaController::class, 'update'])->name('pmliberta.update');
     Route::delete('/PMLiberta/{id}', [PMLibertaController::class, 'destroy'])->name('pmliberta.destroy');
+
+    // --- SUMMARY PM ROUTES ---
+    Route::get('/summarypm', [SummaryPMController::class, 'index'])->name('summarypm');
+    
 });
