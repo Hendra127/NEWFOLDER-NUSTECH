@@ -13,20 +13,6 @@
     <script src="{{ asset('js/profile-dropdown.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        .search-box {
-            background: #fff;
-            border-radius: 50px;
-            padding: 5px 10px;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .search-box input {
-            border: none;
-            outline: none;
-            padding: 10px;
-            background: transparent;
-        }
         .status-badge {
             background-color: #d1e7dd;
             color: #0f5132;
@@ -42,6 +28,25 @@
             background: #f8f9fa;
             border: 1px solid #dee2e6;
             margin-right: 10px;
+        }
+    </style>
+    <style>
+        .search-box {;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            padding: 20px;
+            background: transparent;
+        }
+
+        .filter-btn i {
+            color: #555;
+            font-size: 1.1rem;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -77,13 +82,16 @@
     </header>
 
     <div class="tabs-section d-flex align-items-center">
-    <a href="{{ url('/open-ticket') }}" class="tab {{ request()->is('open-ticket*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Open Tiket</a>
-    <a href="{{ url('/close-ticket') }}" class="tab {{ request()->is('close-ticket*') ? 'active' : '' }}" style="text-decoration: none; color: White;">Close Tiket</a>
-    <a href="{{ url('/detailticket') }}" class="tab {{ request()->is('detailticket*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Detail Tiket</a>
-    <a href="{{ url('/summaryticket') }}" class="tab {{ request()->is('summaryticket*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Summary Tiket</a>
-    <span class="summary-badge text-success ms-auto">Total Close: <b>{{ $closeAllCount }}</b></span>
-    <span class="summary-badge text-success">Close Hari Ini: <b>{{ $todayCount }}</b></span>
-</div>
+        <a href="{{ url('/open-ticket') }}" class="tab {{ request()->is('open-ticket*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Open Tiket</a>
+        <a href="{{ url('/close-ticket') }}" class="tab {{ request()->is('close-ticket*') ? 'active' : '' }}" style="text-decoration: none; color: White;">Close Tiket</a>
+        <a href="{{ url('/detailticket') }}" class="tab {{ request()->is('detailticket*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Detail Tiket</a>
+        <a href="{{ url('/summaryticket') }}" class="tab {{ request()->is('summaryticket*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Summary Tiket</a>
+        
+        <div class="ms-auto d-flex align-items-center">
+            <span class="summary-badge text-black">Total Close: <b>{{ $closeAllCount }}</b></span>
+            <span class="summary-badge text-black">Close Hari Ini: <b>{{ $todayCount }}</b></span>
+        </div>
+    </div>
 
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">

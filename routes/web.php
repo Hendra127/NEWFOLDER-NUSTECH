@@ -16,6 +16,7 @@ use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\TodolistController;
 use App\Http\Controllers\MyDashboardController;
 use App\Http\Controllers\AuthController; // Pastikan Anda punya controller untuk login
+use App\Http\Controllers\PiketController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,7 @@ use App\Http\Controllers\AuthController; // Pastikan Anda punya controller untuk
     Route::get('/ticket/detail/{site_code}', [MyDashboardController::class, 'getDetail']);
     Route::post('/chat/send', [MyDashboardController::class, 'storeMessage'])->name('chat.send');
     Route::get('/chat/fetch', [MyDashboardController::class, 'fetchMessages'])->name('chat.fetch');
+    Route::get('/tickets/filter', [MyDashboardController::class, 'getFilteredTickets'])->name('tickets.filter');
     
 // --- PUBLIC ROUTES (Bisa diakses tanpa login) ---
 Route::get('/', function () {
@@ -47,14 +49,19 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/sites/import', [SiteController::class, 'import'])->name('sites.import');
     Route::resource('sites', SiteController::class)->names(['index' => 'datasite'])->except(['show', 'create', 'edit']);
 
-    // --- OPEN TICKET ROUTES ---
+   // --- OPEN TICKET ROUTES ---
     Route::prefix('open-ticket')->group(function () {
+        // Sekarang namanya sudah 'open.ticket' sesuai pemanggilan di Blade
         Route::get('/', [OpenTicketController::class, 'index'])->name('open.ticket');
+
+        // 2. Rute CRUD dan Operasional
         Route::post('/store', [OpenTicketController::class, 'store'])->name('open.ticket.store');
         Route::get('/export', [OpenTicketController::class, 'export'])->name('open.ticket.export');
         Route::post('/import', [OpenTicketController::class, 'import'])->name('open.ticket.import');
         Route::put('/{id}', [OpenTicketController::class, 'update'])->name('open.ticket.update');
         Route::delete('/{id}', [OpenTicketController::class, 'destroy'])->name('open.ticket.destroy');
+        
+        // 3. Rute Proses Close
         Route::put('/close/{id}', [OpenTicketController::class, 'closeTicket'])->name('open.ticket.close');
     });
 
@@ -109,4 +116,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/PMLiberta/export', [PMLibertaController::class, 'export'])->name('pmliberta.export');
     Route::put('/PMLiberta/{id}', [PMLibertaController::class, 'update'])->name('pmliberta.update');
     Route::delete('/PMLiberta/{id}', [PMLibertaController::class, 'destroy'])->name('pmliberta.destroy');
+
+    // --- JADWAL PIKET ROUTES ---
+    Route::get('/jadwalpiket', [PiketController::class, 'index'])->name('jadwalpiket');
+    Route::post('/jadwal-piket/upload', [PiketController::class, 'upload'])->name('piket.upload');
+    Route::delete('/jadwal-piket/delete-all', [PiketController::class, 'deleteAll'])->name('piket.deleteAll');
+    Route::post('/jadwal-piket/update-shift', [PiketController::class, 'updateShift'])->name('piket.updateShift');
 });

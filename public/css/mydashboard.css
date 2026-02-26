@@ -173,25 +173,105 @@ body {
 }
 
 /* --- Stats Grid --- */
+/* --- Stats Grid Fix --- */
+/* Container Utama Grid */
 .stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    width: 418px;
+    gap: 15px;
+    width: 418px; /* Pastikan lebar ini cukup untuk 2 kolom */
 }
 
+/* Card Base */
 .stat-card {
-    height: 180px;
-    width: 199px;
+    height: 110px;
+    padding: 0; /* Padding dihilangkan agar card-inner bisa mengontrol ruang */
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
+    overflow: hidden;
     position: relative;
-    transition: transform 0.2s;
 }
-.stat-card:hover { transform: scale(1.02); }
+
+.card-inner {
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* Sisi Kiri (Label) */
+.label-side {
+    flex: 1; /* Mengambil 50% ruang */
+    display: flex;
+    justify-content: center; /* Center horizontal */
+    align-items: center; /* Center vertikal */
+    text-align: center;
+    padding: 0 5px;
+}
+
+.label-text {
+    font-weight: 700;
+    line-height: 1.1;
+    font-size: 16px;
+    text-transform: capitalize;
+}
+
+/* Garis Tengah yang Presisi */
+.vertical-divider {
+    width: 1.5px;
+    height: 70%; /* Tinggi garis 70% dari tinggi card agar tidak mentok */
+    background-color: currentColor; /* Mengikuti warna teks card */
+    opacity: 0.3;
+    flex-shrink: 0;
+}
+
+/* Sisi Kanan (Value) */
+.value-side {
+    flex: 1; /* Mengambil 50% ruang */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Blue Card */
+.blue-card {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    color: var(--white);
+}
+.blue-card .value {
+    font-size: 52px; /* Angka lebih besar seperti di gambar */
+    font-weight: 800;
+}
+
+/* White Card */
+.white-card {
+    background: var(--white);
+    color: var(--primary);
+}
+.white-card .value {
+    font-size: 34px;
+    font-weight: 800;
+}
+.white-card .value-group {
+    display: flex;
+    flex-direction: column; /* Angka merah di bawah angka utama */
+    align-items: center;
+    line-height: 1;
+}
+.white-card .sub-value {
+    font-size: 16px;
+    color: var(--accent);
+    font-weight: 700;
+    margin-top: 4px;
+}
+
+/* Hover Effect */
+.stat-card:hover {
+    transform: translateY(-3px);
+    transition: all 0.3s ease;
+}
 
 .stat-card h3 {
     text-align: center;

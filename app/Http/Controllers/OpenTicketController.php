@@ -13,50 +13,60 @@ use Carbon\Carbon;
 class OpenTicketController extends Controller
 {
     public function index(Request $request)
-{
-    // Mengambil semua input untuk filter & search
-    $search = $request->q;
-    $status_tiket = $request->status_tiket;
-    $kategori = $request->kategori;
-    $provinsi = $request->provinsi;
+    {
+        // Menghitung jumlah open dan open hari ini
+        $openAllCount = Ticket::where('status', 'open')->count();
+        $openTodayCount = Ticket::where('status', 'open')
+                                ->whereDate('created_at', Carbon::today())
+                                ->count();
 
-    // Query dasar
-    $tickets = Ticket::with('site')
-        ->where('status', 'open') // Tetap memfilter status utama 'open'
-        
-        // Filter Search (Site Code, Nama, Kabupaten)
-        ->when($search, function ($q) use ($search) {
-            $q->where(function($query) use ($search) {
-                $query->where('site_code', 'like', "%$search%")
-                      ->orWhere('nama_site', 'like', "%$search%")
-                      ->orWhere('kabupaten', 'like', "%$search%");
-            });
-        })
+        // Menghitung jumlah open per kategori
+        $countBMN = Ticket::where('status', 'open')->where('kategori', 'BMN')->count();
+        $countSL = Ticket::where('status', 'open')->where('kategori', 'SL')->count();
 
-        // Filter Status Tiket (dari Modal)
-        ->when($status_tiket, function ($q) use ($status_tiket) {
-            return $q->where('status_tiket', $status_tiket);
-        })
+        // Mengambil semua input untuk filter & search
+        $search = $request->q;
+        $status_tiket = $request->status_tiket;
+        $kategori = $request->kategori;
+        $provinsi = $request->provinsi;
 
-        // Filter Kategori (dari Modal)
-        ->when($kategori, function ($q) use ($kategori) {
-            return $q->where('kategori', $kategori);
-        })
+        // Query dasar
+        $tickets = Ticket::with('site')
+            ->where('status', 'open') // Tetap memfilter status utama 'open'
+            
+            // Filter Search (Site Code, Nama, Kabupaten)
+            ->when($search, function ($q) use ($search) {
+                $q->where(function($query) use ($search) {
+                    $query->where('site_code', 'like', "%$search%")
+                        ->orWhere('nama_site', 'like', "%$search%")
+                        ->orWhere('kabupaten', 'like', "%$search%");
+                });
+            })
 
-        // Filter Provinsi (dari Modal)
-        ->when($provinsi, function ($q) use ($provinsi) {
-            return $q->where('provinsi', 'like', "%$provinsi%");
-        })
+            // Filter Status Tiket (dari Modal)
+            ->when($status_tiket, function ($q) use ($status_tiket) {
+                return $q->where('status_tiket', $status_tiket);
+            })
 
-        ->latest()
-        ->paginate(20)
-        ->withQueryString(); // Sangat penting agar filter tidak hilang saat pindah halaman (pagination)
+            // Filter Kategori (dari Modal)
+            ->when($kategori, function ($q) use ($kategori) {
+                return $q->where('kategori', $kategori);
+            })
 
-    $sites = Site::orderBy('site_id', 'asc')->get();
-    $today = Ticket::whereDate('created_at', Carbon::today())->count();
+            // Filter Provinsi (dari Modal)
+            ->when($provinsi, function ($q) use ($provinsi) {
+                return $q->where('provinsi', 'like', "%$provinsi%");
+            })
 
-    return view('open', compact('tickets', 'sites', 'search', 'today'));
-}
+            ->latest()
+            ->paginate(20)
+            ->withQueryString(); // Sangat penting agar filter tidak hilang saat pindah halaman (pagination)
+
+        $sites = Site::orderBy('site_id', 'asc')->get();
+        $today = Ticket::whereDate('created_at', Carbon::today())->count();
+
+        return view('open', compact('tickets', 'sites', 'search', 'today', 'openAllCount', 'openTodayCount', 'countBMN', 'countSL'));
+    }
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -160,4 +170,5 @@ class OpenTicketController extends Controller
         // Redirect dengan pesan sukses
         return redirect()->back()->with('success', 'Tiket ' . $ticket->nama_site . ' berhasil dipindahkan ke Close Ticket.');
     }
+    
 }

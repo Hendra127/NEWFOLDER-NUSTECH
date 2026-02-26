@@ -55,35 +55,45 @@
 
             <!-- Stats Grid -->
             <div class="stats-grid">
-                <div class="card stat-card blue-card">
-                    <h3>Ticket<br>Today</h3>
-                    <div class="divider"></div>
-                    <span class="value">{{ $todayCount }}</span>
-                </div>
-
-                <div class="card stat-card blue-card">
-                    <h3>All Open<br>Ticket</h3>
-                    <div class="divider"></div>
-                    <span class="value">{{ $totalOpen }}</span>
-                </div>
-
-                <!-- Card 3: PM BMN (White) -->
-                <div class="card stat-card white-card">
-                    <h3>PM BMN</h3>
-                    <div class="divider"></div>
-                    <div class="value-group">
-                        <span class="value">{{ $pmBmnDone }}</span>
-                        <span class="sub-value">/ {{ $pmBmnTotal }}</span>
+                <div class="card stat-card blue-card clickable-card" data-type="today" style="cursor: pointer;">
+                    <div class="card-inner">
+                        <div class="label-side"><span class="label-text">Ticket<br>Today</span></div>
+                        <div class="vertical-divider"></div>
+                        <div class="value-side"><span class="value">{{ $todayCount }}</span></div>
                     </div>
                 </div>
 
-                <!-- Card 4: PM SL (White) -->
-                <div class="card stat-card white-card">
-                    <h3>PM SL</h3>
-                    <div class="divider"></div>
-                    <div class="value-group">
-                        <span class="value">{{ $pmSlDone }}</span>
-                        <span class="sub-value">/ {{ $pmSlTotal }}</span>
+                <div class="card stat-card blue-card clickable-card" data-type="all_open" style="cursor: pointer;">
+                    <div class="card-inner">
+                        <div class="label-side"><span class="label-text">All Open<br>Ticket</span></div>
+                        <div class="vertical-divider"></div>
+                        <div class="value-side"><span class="value">{{ $totalOpen }}</span></div>
+                    </div>
+                </div>
+
+                <div class="card stat-card white-card clickable-card" data-type="pm_bmn" style="cursor: pointer;">
+                    <div class="card-inner">
+                        <div class="label-side"><span class="label-text">PM<br>BMN<br>Done</span></div>
+                        <div class="vertical-divider"></div>
+                        <div class="value-side">
+                            <div class="value-group">
+                                <span class="value">{{ $pmBmnDone }}</span>
+                                <span class="sub-value">/ {{ $pmBmnTotal }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card stat-card white-card clickable-card" data-type="pm_sl" style="cursor: pointer;">
+                    <div class="card-inner">
+                        <div class="label-side"><span class="label-text">PM<br>SL<br>Done</span></div>
+                        <div class="vertical-divider"></div>
+                        <div class="value-side">
+                            <div class="value-group">
+                                <span class="value">{{ $pmSlDone }}</span>
+                                <span class="sub-value">/ {{ $pmSlTotal }}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -587,6 +597,70 @@ loadMessages();
             if (event.target == modal) closeModal();
         };
     </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.clickable-card');
+    
+    cards.forEach(card => {
+        card.addEventListener('click', function() {
+            const type = this.getAttribute('data-type');
+            const tableBody = document.querySelector('table tbody');
+            const tableTitle = document.querySelector('.table-card .card-title');
+            const tableHeaderLast = document.querySelector('table thead th:last-child'); // Target kolom Duration/Date
+
+            // Feedback visual
+            tableBody.innerHTML = '<tr><td colspan="5" class="text-center">Sedang mengambil data...</td></tr>';
+
+            fetch(`/tickets/filter?type=${type}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        if (tableTitle) tableTitle.innerText = data.type_label;
+                        
+                        // FIX: Merubah Header secara dinamis
+                        if (type === 'pm_bmn' || type === 'pm_sl') {
+                            if (tableHeaderLast) tableHeaderLast.innerText = 'Date';
+                        } else {
+                            if (tableHeaderLast) tableHeaderLast.innerText = 'Duration';
+                        }
+
+                        tableBody.innerHTML = '';
+
+                        if (data.tickets.length === 0) {
+                            tableBody.innerHTML = '<tr><td colspan="5" class="text-center">Data tidak ditemukan</td></tr>';
+                            return;
+                        }
+
+                        data.tickets.forEach((t, index) => {
+                            tableBody.innerHTML += `
+                                <tr>
+                                    <td class="text-center">${index + 1}</td>
+                                    <td>${t.nama_site}</td>
+                                    <td class="text-center">${t.site_code}</td>
+                                    <td class="text-center">
+                                        <span class="badge ${t.status === 'DONE' ? 'bg-success' : 'bg-warning'}">
+                                            ${t.status}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">${t.display_date}</td>
+                                </tr>
+                            `;
+                        });
+                    } else {
+                        throw new Error(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    tableBody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Gagal memuat data.</td></tr>';
+                });
+        });
+    });
+});
+</script>
 </body>
 </html>
 </body>

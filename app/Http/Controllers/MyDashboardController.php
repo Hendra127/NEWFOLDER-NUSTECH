@@ -133,4 +133,57 @@ public function storeMessage(Request $request)
 
     return response()->json($chat);
 }
+public function getFilteredTickets(Request $request)
+{
+    try {
+        $type = $request->get('type');
+        $label = "Ticket List";
+        $tickets = [];
+
+        if ($type == 'today' || $type == 'all_open') {
+            $query = \DB::table('tickets');
+            if ($type == 'today') {
+                $query->whereDate('created_at', now());
+                $label = "Tickets Today";
+            } else {
+                $query->where('status', 'open');
+                $label = "All Open Tickets";
+            }
+            
+            $tickets = $query->get()->map(function($item) {
+                return [
+                    'nama_site' => $item->nama_site,
+                    'site_code' => $item->site_code,
+                    'status'    => strtoupper($item->status),
+                    'display_date' => $item->durasi . " Hari"
+                ];
+            });
+        } 
+        elseif ($type == 'pm_bmn' || $type == 'pm_sl') {
+            $kategori = ($type == 'pm_bmn') ? 'BMN' : 'SL';
+            $label = "PM " . $kategori . " Done";
+
+            $tickets = \DB::table('pmliberta')
+                ->where('kategori', $kategori)
+                ->where('status', 'DONE')
+                ->get()
+                ->map(function($item) {
+                    return [
+                        'nama_site' => $item->nama_lokasi ?? '-', // Mengambil dari field nama_lokasi
+                        'site_code' => $item->site_id ?? '-',
+                        'status'    => 'DONE',
+                        'display_date' => $item->date ?? '-' // Mengambil nilai field 'date' asli dari DB
+                    ];
+                });
+        }
+
+        return response()->json([
+            'success' => true,
+            'tickets' => $tickets,
+            'type_label' => $label
+        ]);
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+    }
+}
 }

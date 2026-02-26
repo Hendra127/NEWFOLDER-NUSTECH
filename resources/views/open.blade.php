@@ -11,9 +11,32 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/password.css') }}">
     <link rel="stylesheet" href="{{ asset('css/nav-modal.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script src="{{ asset('js/profile-dropdown.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .status-badge {
+            background-color: #d1e7dd;
+            color: #0f5132;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .summary-badge {
+            font-size: 12px;
+            padding: 5px 15px;
+            border-radius: 50px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            margin-right: 10px;
+        }
+    </style>
     <style>
         .search-box {;
             display: flex;
@@ -64,12 +87,18 @@
             </div>
         </div>
     </header>
-
-    <div class="tabs-section">
+    <div class="tabs-section d-flex align-items-center">
         <a href="{{ url('/open-ticket') }}" class="tab {{ request()->is('open-ticket*') ? 'active' : '' }}" style="text-decoration: none; color: White;">Open Tiket</a>
         <a href="{{ url('/close-ticket') }}" class="tab {{ request()->is('close-ticket*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Close Tiket</a>
         <a href="{{ url('/detailticket') }}" class="tab {{ request()->is('detailticket*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Detail Tiket</a>
         <a href="{{ url('/summaryticket') }}" class="tab {{ request()->is('summaryticket*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Summary Tiket</a>
+        
+        <div class="ms-auto d-flex align-items-center">
+            <span class="summary-badge text-black">Total Open: <b>{{ $openAllCount }}</b></span>
+            <span class="summary-badge text-black">Open Hari Ini: <b>{{ $openTodayCount }}</b></span>
+            <span class="summary-badge text-dark">BMN: <b>{{ $countBMN }}</b></span>
+            <span class="summary-badge text-dark">SL: <b>{{ $countSL }}</b></span>
+        </div>
     </div>
 
     <!-- CARD -->
@@ -234,9 +263,9 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <form method="POST" action="{{ route('open.ticket.store') }}" class="modal-content">
             @csrf
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">Tambah Tiket Baru</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            <div class="modal-header text-white d-flex justify-content-center position-relative" style="background-color: #1B435D;">
+                <h5 class="modal-title text-center">Tambah Tiket Baru</h5>
+                <button type="button" class="btn-close btn-close-white position-absolute end-0 me-3" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <div class="row g-3">
@@ -249,7 +278,8 @@
                                     data-code="{{ $s->site_id }}" 
                                     data-name="{{ $s->sitename }}"
                                     data-prov="{{ $s->provinsi }}"
-                                    data-kab="{{ $s->kab }}">
+                                    data-kab="{{ $s->kab }}"
+                                    data-tipe="{{ $s->tipe }}">
                                 {{ $s->site_id }} - {{ $s->sitename }}
                             </option>
                             @endforeach
@@ -271,13 +301,10 @@
                         <label class="form-label">Kabupaten</label>
                         <input type="text" name="kabupaten" id="kabupaten" class="form-control bg-light" readonly required>
                     </div>
+                    {{-- Input untuk Kategori --}}
                     <div class="col-md-4">
                         <label class="form-label">Kategori</label>
-                        <select name="kategori" class="form-select" required>
-                            <option value="">-- Pilih Kategori --</option>
-                            <option value="BMN">BMN</option>
-                            <option value="SL">SL</option>
-                        </select>
+                        <input type="text" name="kategori" id="kategori" class="form-control bg-light" readonly required>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">Tanggal Rekap</label>
@@ -592,6 +619,76 @@
             });
         });
     });
+</script>
+{{-- Script untuk inisialisasi Select2 pada dropdown site --}}
+<script>
+    $(document).ready(function() {
+    $('#site_select').select2({
+        theme: 'bootstrap-5',
+        placeholder: '-- Cari Site ID --',
+        allowClear: true,
+        width: '100%',
+        // Mengambil parent modal secara otomatis
+        dropdownParent: $('#site_select').closest('.modal') 
+    });
+});
+</script>
+{{-- Script untuk inisialisasi Select2 pada dropdown site dengan perbaikan fokus di modal --}}
+<script>
+$(document).ready(function() {
+    // 1. Inisialisasi Select2 & Perbaikan Fokus di Modal
+    const $siteSelect = $('#site_select');
+    
+    $siteSelect.select2({
+        theme: 'bootstrap-5',
+        placeholder: '-- Cari Site ID --',
+        allowClear: true,
+        width: '100%',
+        // Mengambil parent modal secara otomatis agar bisa diketik
+        dropdownParent: $siteSelect.closest('.modal').length ? $siteSelect.closest('.modal') : $(document.body)
+    });
+
+    // Fix bug Select2: agar kursor otomatis fokus ke kolom pencarian saat diklik
+    $(document).on('select2:open', () => {
+        setTimeout(() => {
+            const searchField = document.querySelector('.select2-search__field');
+            if (searchField) searchField.focus();
+        }, 10);
+    });
+
+    // 2. Event saat Site ID dipilih (Auto-fill & Mapping Kategori)
+    $siteSelect.on('change', function() {
+        const selectedOption = $(this).find(':selected');
+        
+        // Ambil data dasar dari atribut data-
+        const code = selectedOption.data('code');
+        const name = selectedOption.data('name');
+        const prov = selectedOption.data('prov');
+        const kab = selectedOption.data('kab');
+        const tipeFull = selectedOption.data('tipe'); 
+
+        // Logika Mapping Kategori: Mengubah teks panjang menjadi singkatan
+        let kategoriSingkat = "";
+        if (tipeFull) {
+            const tipeUpper = tipeFull.toUpperCase(); // Ubah ke huruf besar semua agar pencarian akurat
+            
+            if (tipeUpper.includes("BARANG MILIK NEGARA") || tipeUpper.includes("BMN")) {
+                kategoriSingkat = "BMN";
+            } else if (tipeUpper.includes("SEWA LAYANAN") || tipeUpper.includes("SL")) {
+                kategoriSingkat = "SL";
+            } else {
+                kategoriSingkat = tipeFull; // Pakai teks asli jika tidak ada kecocokan
+            }
+        }
+
+        // Distribusikan data ke input masing-masing ID
+        $('#site_code').val(code || '');
+        $('#nama_site').val(name || '');
+        $('#provinsi').val(prov || '');
+        $('#kabupaten').val(kab || '');
+        $('#kategori').val(kategoriSingkat); 
+    });
+});
 </script>
 </body>
 </html>
