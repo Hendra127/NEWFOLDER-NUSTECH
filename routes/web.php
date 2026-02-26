@@ -15,8 +15,9 @@ use App\Http\Controllers\SparetrackerController;
 use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\TodolistController;
 use App\Http\Controllers\MyDashboardController;
-use App\Http\Controllers\AuthController; // Pastikan Anda punya controller untuk login
+use App\Http\Controllers\AuthController; 
 use App\Http\Controllers\PiketController;
+use App\Http\Controllers\SummaryPMController;
 
 /*
 |--------------------------------------------------------------------------
@@ -122,4 +123,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/jadwal-piket/upload', [PiketController::class, 'upload'])->name('piket.upload');
     Route::delete('/jadwal-piket/delete-all', [PiketController::class, 'deleteAll'])->name('piket.deleteAll');
     Route::post('/jadwal-piket/update-shift', [PiketController::class, 'updateShift'])->name('piket.updateShift');
+    // --- SUMMARY PM ROUTES ---
+    Route::get('/summarypm', [SummaryPMController::class, 'index'])->name('summarypm');
+    
 });
