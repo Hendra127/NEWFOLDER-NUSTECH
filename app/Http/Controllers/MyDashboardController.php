@@ -7,55 +7,83 @@ use App\Models\Ticket;
 use App\Models\PMLiberta; // Import model PMLiberta
 use Carbon\Carbon;
 use App\Models\Message; // Import model Message
+use App\Models\JadwalPiket; // Import model Piket
 
 class MyDashboardController extends Controller
 {
     public function index()
-    {
-        // 1. Ambil data Tiket Open untuk tabel di dashboard
-        $tickets = Ticket::where('status', 'open')
-            ->latest()
-            ->paginate(10);
+{
+    // Ambil waktu sekarang (WITA)
+    $now = Carbon::now();
+    $today = $now->format('Y-m-d');
+    $currentTime = $now->format('H:i');
 
-        // 2. Hitung Statistik Utama (Ticket)
-        $todayCount = Ticket::whereDate('created_at', Carbon::today())->count();
-        $totalOpen = Ticket::where('status', 'open')->count();
-        
-        // 3. Statistik PM (Diambil dari Model PMLiberta)
-        
-        // Hitung PM BMN: Total yang 'Done' dan Total Keseluruhan
-        $pmBmnDone = PMLiberta::where('kategori', 'BMN')
-            ->where('status', 'DONE')
-            ->count();
-        $pmBmnTotal = PMLiberta::where('kategori', 'BMN')
-            ->count();
+    // 1. Ambil data Tiket Open untuk tabel di dashboard
+    $tickets = Ticket::where('status', 'open')
+        ->latest()
+        ->paginate(10);
 
-        // Hitung PM SL: Total yang 'Done' dan Total Keseluruhan
-        $pmSlDone = PMLiberta::where('kategori', 'SL')
-            ->where('status', 'DONE')
-            ->count();
-        $pmSlTotal = PMLiberta::where('kategori', 'SL')
-            ->count();
+    // 2. Hitung Statistik Utama (Ticket)
+    $todayCount = Ticket::whereDate('created_at', $today)->count();
+    $totalOpen = Ticket::where('status', 'open')->count();
+    
+    // 3. Statistik PM (Diambil dari Model PMLiberta)
+    $pmBmnDone = PMLiberta::where('kategori', 'BMN')->where('status', 'DONE')->count();
+    $pmBmnTotal = PMLiberta::where('kategori', 'BMN')->count();
 
-        // 4. Data untuk Sidebar (Group by Detail Problem)
-        // Kita mengambil detail_problem dan nama_site agar list nama site muncul saat diklik
-        $sidebarTickets = Ticket::where('status', 'open')
-            ->select('detail_problem', 'nama_site') 
-            ->get()
-            ->groupBy('detail_problem');
+    $pmSlDone = PMLiberta::where('kategori', 'SL')->where('status', 'DONE')->count();
+    $pmSlTotal = PMLiberta::where('kategori', 'SL')->count();
 
-        // 5. Kirim semua variabel ke view 'mydashboard'
-        return view('mydashboard', compact(
-            'tickets', 
-            'todayCount', 
-            'totalOpen', 
-            'pmBmnDone',
-            'pmBmnTotal',
-            'pmSlDone',
-            'pmSlTotal',
-            'sidebarTickets'
-        ));
-    }
+    // 4. Data untuk Sidebar (Group by Detail Problem)
+    $sidebarTickets = Ticket::where('status', 'open')
+        ->select('detail_problem', 'nama_site') 
+        ->get()
+        ->groupBy('detail_problem');
+
+    // ==========================================================
+    // 5. LOGIKA OTOMATIS SHIFT BERDASARKAN JAM (FIXED)
+    // ==========================================================
+    
+    // Tentukan Kode Shift Berdasarkan Jam Sekarang
+    $currentShiftCode = match (true) {
+        $currentTime >= '07:30' && $currentTime < '15:30' => 'P', // Pagi
+        $currentTime >= '15:30' && $currentTime < '23:30' => 'S', // Siang
+        ($currentTime >= '23:30' || $currentTime < '07:30') => 'M', // Malam (Sesuai Permintaan)
+        default => 'OFF',
+    };
+
+    // Ambil Personil yang piket HANYA pada shift yang sedang aktif saat ini
+    $piketHariIni = \App\Models\JadwalPiket::with(['user', 'shift'])
+        ->whereDate('tanggal', $today)
+        ->whereHas('shift', function($query) use ($currentShiftCode) {
+            $query->where('kode', $currentShiftCode);
+        })
+        ->get();
+
+    // Tentukan Teks Jam Kerja untuk ditampilkan di Header Dashboard
+    $jamTeks = match($currentShiftCode) {
+        'P' => '07:30 - 15:30',
+        'S' => '15:30 - 23:30',
+        'M' => '23:30 - 07:30', // Jam shift malam diperbaiki
+        default => 'Libur'
+    };
+
+    $shiftInfo = $now->translatedFormat('d M') . " " . $jamTeks . " WITA";
+
+    // 6. Kirim semua variabel ke view 'mydashboard'
+    return view('mydashboard', compact(
+        'tickets', 
+        'todayCount', 
+        'totalOpen', 
+        'pmBmnDone',
+        'pmBmnTotal',
+        'pmSlDone',
+        'pmSlTotal',
+        'sidebarTickets',
+        'piketHariIni',
+        'shiftInfo'
+    ));
+}
     public function getDetail($site_code)
     {
         try {

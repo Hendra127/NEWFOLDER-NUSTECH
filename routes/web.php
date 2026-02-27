@@ -124,6 +124,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/jadwal-piket/upload', [PiketController::class, 'upload'])->name('piket.upload');
     Route::delete('/jadwal-piket/delete-all', [PiketController::class, 'deleteAll'])->name('piket.deleteAll');
     Route::post('/jadwal-piket/update-shift', [PiketController::class, 'updateShift'])->name('piket.updateShift');
+    
     // --- SUMMARY PM ROUTES ---
     Route::get('/summarypm', [SummaryPMController::class, 'index'])->name('summarypm');
     

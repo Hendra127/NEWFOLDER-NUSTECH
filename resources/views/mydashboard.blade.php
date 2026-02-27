@@ -103,26 +103,31 @@
 
                 <!-- Menu Item 1: Piket Schedule (Expanded) -->
                 <div class="card menu-item expanded">
-                    <div class="menu-header">
-                        <span class="menu-title">Piket Schedule</span>
-                        <i class="ph-fill ph-caret-right arrow-icon"></i>
-
-                    </div>
-                    <div class="menu-content">
-                        <div class="shift-info-bar">
-                            <div class="shift-status">
-                                <span>Shift On</span>
-                            </div>
-                            <div class="shift-time">
-                                26 Jan 08:00 - 16:00 WITA
-                            </div>
-                        </div>
-                        <div class="personnel-list">
-                            <div class="personnel-badge">Hendra Hadi Pratama</div>
-                            <div class="personnel-badge">Andri Pratama</div>
-                        </div>
-                    </div>
+    <div class="menu-header">
+        <span class="menu-title">Piket Schedule</span>
+        <i class="ph-fill ph-caret-right arrow-icon"></i>
+    </div>
+    <div class="menu-content">
+        <div class="shift-info-bar">
+            <div class="shift-status">
+                <span>{{ $piketHariIni->isNotEmpty() ? 'Shift On' : 'No Shift' }}</span>
+            </div>
+            <div class="shift-time">
+                {{ $shiftInfo }}
+            </div>
+        </div>
+        <div class="personnel-list">
+            @forelse($piketHariIni as $piket)
+                <div class="personnel-badge">
+                    {{ $piket->user->name ?? $piket->nama_petugas }}
+                    <span class="badge bg-light text-dark ms-1" style="font-size: 10px;">{{ $piket->shift->kode }}</span>
                 </div>
+            @empty
+                <div class="text-muted small p-2">Semua personil sedang OFF hari ini.</div>
+            @endforelse
+        </div>
+    </div>
+</div>
 
                 <!-- Menu Item 2: Open Ticket Problem (Collapsed) -->
                 <div class="card menu-item collapsed">
