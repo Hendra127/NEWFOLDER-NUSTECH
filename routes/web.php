@@ -18,6 +18,7 @@ use App\Http\Controllers\MyDashboardController;
 use App\Http\Controllers\AuthController; 
 use App\Http\Controllers\PiketController;
 use App\Http\Controllers\SummaryPMController;
+use App\Http\Controllers\LandingpageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -126,4 +127,20 @@ Route::middleware(['auth'])->group(function () {
     // --- SUMMARY PM ROUTES ---
     Route::get('/summarypm', [SummaryPMController::class, 'index'])->name('summarypm');
     
+
+
+// Halaman Utama (Landing Page) - Bisa diakses siapa saja
+Route::get('/', [LandingpageController::class, 'index'])->name('home');
+
+// Rute yang memerlukan login (Middleware Auth)
+Route::middleware(['auth'])->group(function () {
+    
+    // Halaman landingpage
+    Route::get('/landingpage', [LandingpageController::class, 'index'])->name('landingpage');
+    Route::get('/todo', [LandingpageController::class, 'todo'])->name('todo');
+    Route::post('/logout', [LandingpageController::class, 'logout'])->name('logout');
+    
+});
+
+
 });
