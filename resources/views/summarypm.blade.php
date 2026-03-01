@@ -17,31 +17,9 @@
     <script src="{{ asset('js/nav-modal.js') }}"></script>
     <script src="{{ asset('js/profile-dropdown.js') }}"></script>
 
-    <style>
-        /* Memastikan body tidak memiliki margin default yang merusak layout */
-        body { margin: 0; padding: 0; }
-        
-        .tabs-section {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        .tab {
-            padding: 0.5rem 1.5rem;
-            border-radius: 9999px;
-            background-color: white;
-            border: 1px solid #e5e7eb;
-            transition: all 0.3s;
-        }
-        .tab.active {
-            background-color: #2C4E68;
-            color: white !important;
-        }
-    </style>
+    
 </head>
-<body class="bg-gray-100">
-
-    <header class="main-header bg-[#2C4E68] text-white p-3">
+<header class="main-header">
         <div class="header-logo-container">
             <a href="javascript:void(0)" class="header-brand-link" onclick="openNavModal()" style="text-decoration: none !important; color: white !important;">
                 <div class="header-brand" style="display: flex; align-items: center; gap: 8px; font-weight: bold;">
@@ -49,17 +27,34 @@
                 </div>
             </a>
         </div>
+
+        <div class="user-profile-wrapper" style="position: relative;">
+            <div class="user-profile-icon" id="profileDropdownTrigger" style="cursor: pointer;">
+                <i class="bi bi-person-circle" style="font-size: 1.5rem;"></i>
+            </div>
+
+            <div id="profileDropdownMenu" class="hidden" style="position: absolute; right: 0; top: 100%; mt: 10px; width: 150px; background: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; display: none; flex-direction: column; overflow: hidden;">
+                <div style="padding: 10px 15px; border-bottom: 1px solid #eee; font-size: 14px; font-weight: bold; color: #333;">
+                    {{ auth()->user()->name }}
+                </div>
+                
+                <form action="{{ route('logout') }}" method="POST" id="logout-form">
+                    @csrf
+                    <button type="submit" style="width: 100%; text-align: left; padding: 10px 15px; background: none; border: none; font-size: 14px; color: #dc3545; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </button>
+                </form>
+            </div>
+        </div>
     </header>
 
-    <main class="p-6 font-sans">
-        
-        <div class="tabs-section">
-            <a href="{{ route('datasite') }}" class="tab {{ request()->is('datasite*') ? 'active' : '' }}" style="text-decoration: none; color: black;">All Sites</a>
-            <a href="{{ url('/datapass') }}" class="tab {{ request()->is('datapass*') ? 'active' : '' }}" style="text-decoration: none; color: black;">Management Password</a>
-            <a href="{{ url('/laporanpm') }}" class="tab {{ request()->is('laporanpm*') ? 'active' : '' }}" style="text-decoration: none; color: black;">Laporan PM</a>
-            <a href="{{ url('/PMLiberta') }}" class="tab {{ request()->is('PMLiberta*') ? 'active' : '' }}" style="text-decoration: none; color: black;">PM Liberta</a>
-            <a href="{{ url('/summarypm') }}" class="tab {{ request()->is('summarypm*') ? 'active' : '' }}" style="text-decoration: none; color: black;">PM Summary</a>
-        </div>
+    <div class="tabs-section">
+        <a href="{{ route('datasite') }}" class="tab {{ request()->is('datasite*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">All Sites</a>
+        <a href="{{ url('/datapass') }}" class="tab {{ request()->is('datapass*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Management Password</a>
+        <a href="{{ url('/laporanpm') }}" class="tab {{ request()->is('laporanpm*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">Laporan PM</a>
+        <a href="{{ url('/PMLiberta') }}" class="tab {{ request()->is('PMLiberta*') ? 'active' : '' }}" style="text-decoration: none; color: Black;">PM Liberta</a>
+        <a href="{{ url('/summarypm') }}" class="tab {{ request()->is('summarypm*') ? 'active' : '' }}" style="text-decoration: none; color: White;">PM Summary</a>
+    </div>
 
         <div class="flex gap-4 mb-6">
             <select class="bg-white border rounded-lg px-4 py-2 shadow-sm outline-none">

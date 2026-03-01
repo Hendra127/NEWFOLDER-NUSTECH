@@ -39,42 +39,41 @@ class PiketController extends Controller
 {
     try {
         $namaPetugas = trim($request->nama);
-
-        // 1. Cek atau Buat User Baru
         $user = \App\Models\User::firstOrCreate(
             ['name' => $namaPetugas],
             [
                 'email' => str_replace(' ', '.', strtolower($namaPetugas)) . '@nustech.co.id',
                 'password' => bcrypt('Masuk123*#'),
-                'is_admin' => 1, // SET SEBAGAI ADMIN SESUAI PERMINTAAN
+                'is_admin' => 1,
             ]
         );
-        
-        // 2. Cari ID Shift berdasarkan kode (M, S, P)
+
+        // JIKA KODE ADALAH 'OFF', HAPUS DATA JADWAL (KARENA LIBUR)
+        if ($request->shift_kode === 'OFF') {
+            \App\Models\JadwalPiket::where('user_id', $user->id)
+                ->where('tanggal', $request->tanggal)
+                ->delete();
+
+            return response()->json(['status' => 'success', 'message' => 'Jadwal dikosongkan (OFF)']);
+        }
+
+        // CARI SHIFT BERDASARKAN KODE
         $shift = \App\Models\Shift::where('kode', $request->shift_kode)->first();
 
-        // 3. Simpan ke Tabel jadwal_piket (Sesuai model Anda)
+        // VALIDASI JIKA SHIFT TIDAK DITEMUKAN DI DB
+        if (!$shift) {
+            return response()->json(['status' => 'error', 'message' => 'Master data Shift ' . $request->shift_kode . ' tidak ditemukan!'], 404);
+        }
+
         \App\Models\JadwalPiket::updateOrCreate(
-            [
-                'user_id' => $user->id,
-                'tanggal' => $request->tanggal,
-            ],
-            [
-                'shift_id' => $shift ? $shift->id : null,
-                'status'   => 'aktif'
-            ]
+            ['user_id' => $user->id, 'tanggal' => $request->tanggal],
+            ['shift_id' => $shift->id, 'status' => 'aktif']
         );
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Berhasil! User ' . $namaPetugas . ' diset sebagai Admin.'
-        ]);
+        return response()->json(['status' => 'success', 'message' => 'Berhasil update shift.']);
 
     } catch (\Exception $e) {
-        return response()->json([
-            'status' => 'error', 
-            'message' => 'Gagal simpan: ' . $e->getMessage()
-        ], 500);
+        return response()->json(['status' => 'error', 'message' => 'Gagal: ' . $e->getMessage()], 500);
     }
 }
 }
