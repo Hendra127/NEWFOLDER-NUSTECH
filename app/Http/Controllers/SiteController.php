@@ -15,16 +15,36 @@ class SiteController extends Controller
     {
         $query = Site::query();
 
+        // Filter Search Global (seperti yang sudah ada)
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
                 $q->where('site_id', 'like', '%' . $request->search . '%')
-                  ->orWhere('sitename', 'like', '%' . $request->search . '%')
-                  ->orWhere('provinsi', 'like', '%' . $request->search . '%')
-                  ->orWhere('kab', 'like', '%' . $request->search . '%');
+                ->orWhere('sitename', 'like', '%' . $request->search . '%')
+                ->orWhere('provinsi', 'like', '%' . $request->search . '%')
+                ->orWhere('kab', 'like', '%' . $request->search . '%');
             });
         }
-        
-        $sites = $query->latest()->paginate(20)->withQueryString();
+
+        // --- TAMBAHKAN LOGIKA FILTER SPESIFIK DI BAWAH INI ---
+
+        // Filter Tipe
+        if ($request->filled('tipe')) {
+            $query->where('tipe', $request->tipe);
+        }
+
+        // Filter Provinsi
+        if ($request->filled('provinsi')) {
+            $query->where('provinsi', 'like', '%' . $request->provinsi . '%');
+        }
+
+        // Filter Kabupaten (Kab)
+        if ($request->filled('kab')) {
+            $query->where('kab', 'like', '%' . $request->kab . '%');
+        }
+
+        // ----------------------------------------------------
+
+        $sites = $query->latest()->get();
         return view('datasite', compact('sites'));
     }
 

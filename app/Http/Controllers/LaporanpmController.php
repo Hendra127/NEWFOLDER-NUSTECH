@@ -66,7 +66,6 @@ class LaporanPMController extends Controller
             'masalah_kendala' => $request->masalah_kendala, // Ambil dari name="kendala" di blade
             'action'          => $request->action,
             'ket_tambahan'    => $request->ket_tambahan,
-            'status_laporan'  => $request->status, // Map ke kolom status_laporan
             'status'          => $request->status, // Map ke kolom status
         ]);
 
@@ -89,7 +88,6 @@ public function update(Request $request, $id)
         'action'          => $request->action,
         'ket_tambahan'    => $request->ket_tambahan,
         'status'          => $request->status,
-        'status_laporan'  => $request->status,
     ]);
 
     return redirect()->back()->with('success', 'Data berhasil diperbarui!');

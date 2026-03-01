@@ -17,6 +17,44 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <style>
+        .status-badge {
+            background-color: #d1e7dd;
+            color: #0f5132;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .summary-badge {
+            font-size: 12px;
+            padding: 5px 15px;
+            border-radius: 50px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            margin-right: 10px;
+        }
+    </style>
+    <style>
+        .search-box {;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            padding: 20px;
+            background: transparent;
+        }
+
+        .filter-btn i {
+            color: #555;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+    </style>
+
 </head>
 <body>
 
@@ -75,59 +113,63 @@
                 </a>
             </div>
 
-            <form method="GET" action="{{ route('datasite') }}" class="search-form" id="search-form">
-                <div class="search-box">
-                    <input type="text" name="search" id="search-input" placeholder="Search" value="{{ request('search') }}" autocomplete="off">
+            <form method="GET" action="{{ route('datasite') }}" class="search-form">
+                <div class="search-box d-flex align-items-center">
+                    <button type="button" class="filter-btn" data-bs-toggle="modal" data-bs-target="#modalFilter" style="background: none; border: none; padding-left: 15px;">
+                        <i class="bi bi-sliders2"></i> </button>
+
+                    <input type="text" id="searchInput" name="q" placeholder="Search..." value="{{ request('q') }}" style="flex-grow: 1; border: none; outline: none;">
+                    
                     <button type="submit" class="search-btn">🔍</button>
                 </div>
             </form>
         </div>
-
-        <div style="overflow-x: auto; max-height: 600px; overflow-y: auto;">
-        <table>
-            <thead>
-                <tr class="thead-dark">
-                    <th>NO</th>
-                    <th>SITE ID</th>
-                    <th>SITENAME</th>
-                    <th>TIPE</th>
-                    <th>BATCH</th>
-                    <th>LATITUDE</th>
-                    <th>LONGITUDE</th>
-                    <th>PROVINSI</th>
-                    <th>KABUPATEN</th>
-                    <th>KECAMATAN</th>
-                    <th>KELURAHAN</th>
-                    <th>ALAMAT LOKASI</th>
-                    <th>NAMA PIC</th>
-                    <th>NOMOR PIC</th>
-                    <th>SUMBER LISTRIK</th>
-                    <th>GATEWAY AREA</th>
-                    <th>BEAM</th>
-                    <th>HUB</th>
-                    <th>KODEFIKASI</th>
-                    <th>SN ANTENA</th>
-                    <th>SN MODEM</th>
-                    <th>SN ROUTER</th>
-                    <th>SN AP1</th>
-                    <th>SN AP2</th>
-                    <th>SN TRANSCIEVER</th>
-                    <th>SN STABILIZER</th>
-                    <th>SN RAK</th>
-                    <th>IP MODEM</th>
-                    <th>IP ROUTER</th>
-                    <th>IP AP1</th>
-                    <th>IP AP2</th>
-                    <th>EXPECTED SQF</th>
-                    <th>AKSI</th>
-                </tr>
-            </thead>
+        
+        <div class="table-responsive-custom">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="sticky-col col-no">NO</th>
+                        <th class="sticky-col col-site-id">SITE ID</th>
+                        <th class="sticky-col col-sitename">SITENAME</th>
+                        <th>TIPE</th>
+                        <th>BATCH</th>
+                        <th>LATITUDE</th>
+                        <th>LONGITUDE</th>
+                        <th>PROVINSI</th>
+                        <th>KABUPATEN</th>
+                        <th>KECAMATAN</th>
+                        <th>KELURAHAN</th>
+                        <th>ALAMAT LOKASI</th>
+                        <th>NAMA PIC</th>
+                        <th>NOMOR PIC</th>
+                        <th>SUMBER LISTRIK</th>
+                        <th>GATEWAY AREA</th>
+                        <th>BEAM</th>
+                        <th>HUB</th>
+                        <th>KODEFIKASI</th>
+                        <th>SN ANTENA</th>
+                        <th>SN MODEM</th>
+                        <th>SN ROUTER</th>
+                        <th>SN AP1</th>
+                        <th>SN AP2</th>
+                        <th>SN TRANSCIEVER</th>
+                        <th>SN STABILIZER</th>
+                        <th>SN RAK</th>
+                        <th>IP MODEM</th>
+                        <th>IP ROUTER</th>
+                        <th>IP AP1</th>
+                        <th>IP AP2</th>
+                        <th>EXPECTED SQF</th>
+                        <th>AKSI</th>
+                    </tr>
+                </thead>
             <tbody>
                 @forelse($sites as $index => $site)
                     <tr>
-                        <td>{{ $sites->firstItem() + $index }}</td>
-                        <td>{{ $site->site_id }}</td>
-                        <td>{{ $site->sitename }}</td>
+                        <td class="text-center sticky-col col-no">{{ $loop->iteration }}</td>
+                        <td class="sticky-col col-site-id">{{ $site->site_id }}</td>
+                        <td class="sticky-col col-sitename">{{ $site->sitename }}</td>
                         <td>{{ $site->tipe }}</td>
                         <td>{{ $site->batch }}</td>
                         <td>{{ $site->latitude }}</td>
@@ -275,7 +317,44 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modalFilter" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Filter Data Site</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="GET" action="{{ route('datasite') }}"> 
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">Tipe</label>
+                            <select name="tipe" class="form-select">
+                                <option value="">Semua Tipe</option>
+                                <option value="BARANG MILIK NEGARA (BMN)" {{ request('tipe') == 'BARANG MILIK NEGARA (BMN)' ? 'selected' : '' }}>BMN</option>
+                                <option value="SEWA LAYANAN" {{ request('tipe') == 'SEWA LAYANAN' ? 'selected' : '' }}>SL</option>
+                            </select>
+                        </div>
 
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">Provinsi</label>
+                            <input type="text" name="provinsi" class="form-control" placeholder="Nama Provinsi..." value="{{ request('provinsi') }}">
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">Kabupaten</label>
+                            <input type="text" name="kab" class="form-control" placeholder="Nama Kabupaten..." value="{{ request('kab') }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="{{ route('datasite') }}" class="btn btn-light border">Reset</a>
+                    <button type="submit" class="btn btn-primary">Terapkan Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 {{-- Script untuk handling modal dan SweetAlert --}}
 <script>

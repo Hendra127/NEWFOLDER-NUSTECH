@@ -86,12 +86,12 @@
             </form>
         </div>
 
-        <div style="overflow-x: auto; max-height: 600px; overflow-y: auto;">
-        <table>
+        <div class="table-responsive-custom">
+            <table class="table table-bordered">
             <thead>
                 <tr class="thead-dark">
-                        <th>No</th>
-                        <th>Nama Lokasi</th>
+                        <th class="sticky-col col-no">No</th>
+                        <th class="sticky-col col-no">Nama Lokasi</th>
                         <th>Kabupaten</th>
                         <th>ADOP</th>
                         <th>PASS AP1</th>
@@ -102,8 +102,8 @@
                 <tbody>
                     @forelse ($datapass as $row)
                     <tr>
-                        <td class="text-center">{{ $loop->iteration }}</td>
-                        <td>{{ $row->nama_lokasi }}</td>
+                        <td class="text-center sticky-col col-no">{{ $loop->iteration }}</td>
+                        <td class="sticky-col col-no">{{ $row->nama_lokasi }}</td>
                         <td>{{ $row->kabupaten }}</td>
                         <td class="text-center">{{ $row->adop }}</td>
                         <td>{{ $row->pass_ap1 }}</td>
