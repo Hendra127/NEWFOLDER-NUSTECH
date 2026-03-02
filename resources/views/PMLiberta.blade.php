@@ -117,13 +117,13 @@
             </form>
         </div>
 
-        <div style="overflow-x: auto; max-height: 600px; overflow-y: auto;">
-        <table>
+        <div class="table-responsive-custom">
+            <table class="table table-bordered">
             <thead>
                 <tr class="thead-dark">
-                        <th>NO</th>
-                        <th>SITE ID</th>
-                        <th>NAMA LOKASI</th>
+                        <th class="text-center sticky-col col-no">NO</th>
+                        <th class="sticky-col col-site-id">SITE ID</th>
+                        <th class="sticky-col col-nama_lokasi">NAMA LOKASI</th>
                         <th>PROVINSI</th>
                         <th>KABUPATEN / KOTA</th>
                         <th>PIC CE</th>
@@ -138,9 +138,9 @@
                 <tbody>
                     @forelse($data as $key => $item)
                     <tr>
-                        <td class="text-center">{{ $loop->iteration }}</td>
-                        <td class="text-center">{{ $item->site_id }}</td>
-                        <td>{{ $item->nama_lokasi }}</td>
+                        <td class="text-center sticky-col col-no">{{ $loop->iteration }}</td>
+                        <td class="text-center sticky-col col-site-id">{{ $item->site_id }}</td>
+                        <td class="sticky-col col-nama_lokasi">{{ $item->nama_lokasi }}</td>
                         <td>{{ $item->provinsi }}</td>
                         <td>{{ $item->kabupaten }}</td>
                         <td>{{ $item->pic_ce }}</td>

@@ -125,8 +125,8 @@
         </div>
 
         {{-- TABLE --}}
-        <div style="overflow-x: auto; max-height: 600px;">
-            <table>
+        <div class="table-responsive-custom">
+            <table class="table table-bordered">
                 <thead>
                     <tr class="thead-dark">
                         <th>NO</th>

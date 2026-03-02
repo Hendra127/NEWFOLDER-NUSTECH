@@ -142,13 +142,13 @@
         </div>
 
         {{-- TABLE --}}
-        <div style="overflow-x: auto; max-height: 600px; overflow-y: auto;">
-            <table>
+        <div class="table-responsive-custom">
+            <table class="table table-bordered">
                 <thead>
-                    <tr class="thead-dark">
-                        <th>NO</th>
-                        <th>SITE ID</th>
-                        <th>NAMA SITE</th>
+                    <tr>
+                        <th class="sticky-col col-no">NO</th>
+                        <th class="sticky-col col-site-id">SITE ID</th>
+                        <th class="sticky-col col-nama_site">NAMA SITE</th>
                         <th>DURASI</th>
                         <th>TANGGAL OPEN</th>
                         <th>PROVINSI</th>
@@ -165,9 +165,9 @@
                 <tbody>
                     @forelse($tickets as $i => $t)
                     <tr>
-                        <td>{{ $tickets->firstItem() + $i }}</td>
-                        <td>{{ $t->site_code }}</td>
-                        <td>{{ $t->nama_site }}</td>
+                        <td class="text-center sticky-col col-no">{{ $tickets->firstItem() + $i }}</td>
+                        <td class="text-center sticky-col col-site-id">{{ $t->site_code }}</td>
+                        <td class="sticky-col col-nama_site">{{ $t->nama_site }}</td>
                         <td class="text-center">
                             @php
                                 $tanggalRekap = \Carbon\Carbon::parse($t->tanggal_rekap)->startOfDay();

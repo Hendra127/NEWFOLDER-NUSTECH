@@ -91,14 +91,14 @@
         </form>
     </div>
 
-    <div style="overflow-x: auto; max-height: 600px; overflow-y: auto;">
-        <table>
+    <div class="table-responsive-custom">
+        <table class="table table-bordered">
             <thead>
-                <tr class="thead-dark">
-                <th>NO</th>
+                <tr>
+                <th class="sticky-col col-no">NO</th>
                 <th>TANGGAL SUBMIT</th>
-                <th>SITE ID</th>
-                <th>LOKASI SITE</th>
+                <th class="sticky-col col-site-id">SITE ID</th>
+                <th class="sticky-col col-lokasi_site">LOKASI SITE</th>
                 <th>KABUPATEN / KOTA</th>
                 <th>PROVINSI</th>
                 <th>PM BULAN</th>
@@ -115,10 +115,10 @@
             <tbody>
             @forelse($data as $item)
                 <tr class="text-center">
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->tanggal_submit }}</td>
-                    <td>{{ $item->site_id }}</td>
-                    <td>{{ $item->lokasi_site ?? '-' }}</td>
+                    <td class="text-center sticky-col col-no">{{ $loop->iteration }}</td>
+                    <td> {{ $item->tanggal_submit }}</td>
+                    <td class="sticky-col col-site-id">{{ $item->site_id }}</td>
+                    <td class="sticky-col col-lokasi_site">{{ $item->lokasi_site ?? '-' }}</td>
                     <td>{{ $item->kabupaten_kota ?? '-' }}</td>
                     <td>{{ $item->provinsi ?? '-' }}</td>
                     <td>{{ $item->pm_bulan ?? '-' }}</td>
@@ -157,7 +157,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="14" class="text-start p-3">
+                    <td colspan="14" class="text-center p-3">
                         Showing 0 of 0 results
                     </td>
                 </tr>
