@@ -19,6 +19,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PiketController;
 use App\Http\Controllers\SummaryPMController;
 use App\Http\Controllers\LandingpageController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -141,7 +142,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/todo', [LandingpageController::class, 'todo'])->name('todo');
     Route::post('/logout', [LandingpageController::class, 'logout'])->name('logout');
     
-});
+// Rute untuk halaman profil user
+    Route::group(['middleware' => 'auth'], function () {
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/update-photo', [ProfileController::class, 'updatePhoto'])->name('profile.update-photo');
+    
+    });
 
+});
 
 });

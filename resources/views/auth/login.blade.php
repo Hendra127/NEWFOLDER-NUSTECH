@@ -96,5 +96,6 @@
             <p class="text-slate-500 text-xs">Secure authentication powered by NUSTECH</p>
         </div>
     </div>
+    
 </body>
 </html>
